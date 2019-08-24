@@ -26,7 +26,6 @@ class InputController extends Component {
     };
     this.constructButtons = this.constructButtons.bind(this);
     this.selectPremise = this.selectPremise.bind(this);
-    this.addMP = this.addMP.bind(this);
     this.assumeCD = this.assumeCD.bind(this);
   }
 
@@ -72,20 +71,12 @@ class InputController extends Component {
    */
   assumeCD() {
     this.setState((state) => ({
+      selectedPremises: [...state.selectedPremises,
+        state.conclusion.getAntecedent()],
       inputString: state.inputString.concat('Ass CD'),
       submitToggle: true,
     }));
     this.state.conclusion.toggleAnteAssumed();
-  }
-
-  /**
-   * On-click function for adding the MP rule to the user input string.
-   */
-  addMP() {
-    this.setState((state) => ({
-      // TODO: add functionality to this function.
-      inputString: state.inputString.concat(' MP'),
-    }));
   }
 
   /**
@@ -120,13 +111,14 @@ class InputController extends Component {
       this.setState((state) => ({
         errorMessage: newPremise,
       }));
+    } else {
+      this.setState((state) => ({
+        selectedPremises: [newPremise],
+        selectedRules: [...state.selectedRules, newRule],
+        inputString: state.inputString.concat(' ', rule.getName()),
+        submitToggle: true,
+      }));
     }
-    this.setState((state) => ({
-      selectedPremises: [newPremise],
-      selectedRules: [...state.selectedRules, newRule],
-      inputString: state.inputString.concat(' ', rule.getName()),
-      submitToggle: true,
-    }));
   }
 
   /**

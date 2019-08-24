@@ -28,6 +28,7 @@ class Premise {
       case 'conditional':
         this.ante = premise1;
         this.cons = premise2;
+        this.antiAssumed = false;
         break;
       case 'and':
       case 'or':

@@ -43,7 +43,7 @@ class InputController extends Component {
     // Add Premise buttons for each Premise available to the user.
     this.state.availablePremises.forEach(function(premise, index) {
       const button = <button type="button" onClick={() =>
-        this.selectPremise(premise.getID(), premise.getPremiseString())
+        this.selectPremise(premise)
       }>{premise.getID()}</button>;
       buttons.push(button);
     }.bind(this));
@@ -70,26 +70,22 @@ class InputController extends Component {
    */
   addMP() {
     this.setState((state) => ({
+      // TODO: add functionality to this function.
       inputString: state.inputString.concat(' MP'),
-      selectedPremises: [...state.selectedPremises,
-        {id: 'MP', premise: 'tempMP'}],
-      submitToggle: true,
     }));
   }
 
   /**
    * When a premise is clicked, it needs to be added to selectedPremises in
    * state.
-   * @param {integer} premiseID - The ID of the premise being selected.
-   * @param {string} premiseText - String containing the text of the premise.
+   * @param {Premise} premise - The ID of the premise being selected.
    */
-  selectPremise(premiseID, premiseText) {
+  selectPremise(premise) {
     this.setState((state) => ({
-      selectedPremises: [...state.selectedPremises,
-        {id: premiseID, premise: premiseText}],
+      selectedPremises: [...state.selectedPremises, premise],
       availablePremises: state.availablePremises.filter(
-          (premise) => premise.getID() !== premiseID),
-      inputString: state.inputString.concat(' ', premiseID),
+          (p) => p.getID() !== premise.getID()),
+      inputString: state.inputString.concat(' ', premise.getID()),
       submitToggle: false,
     }));
   }

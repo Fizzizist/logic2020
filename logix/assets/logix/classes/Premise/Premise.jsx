@@ -28,6 +28,7 @@ class Premise {
       case 'conditional':
         this.ante = premise1;
         this.cons = premise2;
+        this.antiAssumed = false;
         break;
       case 'and':
       case 'or':
@@ -83,6 +84,34 @@ class Premise {
    */
   getID() {
     return this.id;
+  }
+
+  /**
+   * Getter for assumed variable if the premise is of conditional type.
+   * @return {bool} - Boolean representing the state of the antiAssumed variable
+   */
+  getAnteAssumed() {
+    return this.anteAssumed;
+  }
+
+  /**
+   * Getter for the antecedent Premise object if type is 'conditional'
+   * @return {Premise} - Premise object which is the antecedent in the
+   * conditional.
+   */
+  getAntecedent() {
+    return this.ante;
+  }
+
+  /**
+   * Toggle for assumed variable if the premise is of conditional type.
+   */
+  toggleAnteAssumed() {
+    if (!this.anteAssumed) {
+      this.anteAssumed = true;
+    } else {
+      this.anteAssumed = false;
+    }
   }
 }
 

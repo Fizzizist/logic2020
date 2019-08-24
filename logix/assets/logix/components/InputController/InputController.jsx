@@ -22,6 +22,7 @@ class InputController extends Component {
     this.constructButtons = this.constructButtons.bind(this);
     this.selectPremise = this.selectPremise.bind(this);
     this.addMP = this.addMP.bind(this);
+    this.assumeCD = this.assumeCD.bind(this);
   }
 
   /**
@@ -32,9 +33,9 @@ class InputController extends Component {
    */
   constructButtons() {
     const buttons = [];
-
     // Add buttons for Assume statements.
-    if (this.state.conclusion.getType() === 'conditional') {
+    if (this.state.conclusion.getType() === 'conditional' &&
+        !this.state.conclusion.getAnteAssumed()) {
       const button = <button type='button' onClick={
         this.assumeCD}>Assume CD</button>;
       buttons.push(button);
@@ -62,7 +63,11 @@ class InputController extends Component {
    * the antecedent to the conditional conclusion.
    */
   assumeCD() {
-
+    this.setState((state) => ({
+      inputString: state.inputString.concat('Ass CD'),
+      submitToggle: true,
+    }));
+    this.state.conclusion.toggleAnteAssumed();
   }
 
   /**
@@ -86,7 +91,6 @@ class InputController extends Component {
       availablePremises: state.availablePremises.filter(
           (p) => p.getID() !== premise.getID()),
       inputString: state.inputString.concat(' ', premise.getID()),
-      submitToggle: false,
     }));
   }
 

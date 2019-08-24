@@ -104,6 +104,15 @@ class Premise {
   }
 
   /**
+   * Getter for the consequent Premise object if type is 'conditional'
+   * @return {Premise} - Premise object which is the consequent in the
+   * conditional.
+   */
+  getConsequent() {
+    return this.cons;
+  }
+
+  /**
    * Toggle for assumed variable if the premise is of conditional type.
    */
   toggleAnteAssumed() {

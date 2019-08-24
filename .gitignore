@@ -1,0 +1,10 @@
+# Untracked folders
+.idea/
+node_modules/
+logix/static/
+logix-venv/
+
+
+# Untracked files
+requirements.txt
+webpack-stats.json

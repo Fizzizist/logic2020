@@ -84,6 +84,43 @@ class Premise {
   getID() {
     return this.id;
   }
+
+  /**
+   * Getter for assumed variable if the premise is of conditional type.
+   * @return {bool} - Boolean representing the state of the antiAssumed variable
+   */
+  getAnteAssumed() {
+    return this.anteAssumed;
+  }
+
+  /**
+   * Getter for the antecedent Premise object if type is 'conditional'
+   * @return {Premise} - Premise object which is the antecedent in the
+   * conditional.
+   */
+  getAntecedent() {
+    return this.ante;
+  }
+
+  /**
+   * Getter for the consequent Premise object if type is 'conditional'
+   * @return {Premise} - Premise object which is the consequent in the
+   * conditional.
+   */
+  getConsequent() {
+    return this.cons;
+  }
+
+  /**
+   * Toggle for assumed variable if the premise is of conditional type.
+   */
+  toggleAnteAssumed() {
+    if (!this.anteAssumed) {
+      this.anteAssumed = true;
+    } else {
+      this.anteAssumed = false;
+    }
+  }
 }
 
 export default Premise;

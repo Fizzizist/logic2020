@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
 import Rule from '../../classes/Rule';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {submitCommandAction} from '../../actions';
 
 /**
  * React Component for user input into the Derivation Component.
@@ -23,10 +26,12 @@ class InputController extends Component {
       inputString: '',
       submitToggle: false,
       errorMessage: '',
+      lineNumber: 1,
     };
     this.constructButtons = this.constructButtons.bind(this);
     this.selectPremise = this.selectPremise.bind(this);
     this.assumeCD = this.assumeCD.bind(this);
+    this.submitCommand = this.submitCommand.bind(this);
   }
 
   /**
@@ -122,6 +127,26 @@ class InputController extends Component {
   }
 
   /**
+   * On-click function for the submit button that takes the resulting premise
+   * and pushes it into the redux state.
+   */
+  submitCommand() {
+    if (this.state.selectedPremises.length === 1) {
+      this.state.selectedPremises[0].setID(this.state.lineNumber.toString());
+      this.state.selectedPremises[0].setCommandText(this.state.inputString);
+      this.props.submitCommandAction(this.state.selectedPremises[0]);
+      this.setState((state) => ({
+        inputString: '',
+        submitToggle: false,
+        availablePremises: [...state.availablePremises,
+          state.selectedPremises[0]],
+        selectedPremises: [],
+        lineNumber: state.lineNumber + 1,
+      }));
+    }
+  }
+
+  /**
    * The final HTML render from the Component.
    * @return {string} HTML containing all of the Component's elements.
    */
@@ -132,11 +157,24 @@ class InputController extends Component {
         {buttons}
         <p>Command: {this.state.inputString}</p>
         {this.state.submitToggle &&
-        <button type='button' onClick=''>Submit Command</button>}
+        <button type='button' onClick={
+          this.submitCommand}>Submit Command</button>}
         <p>**{this.state.errorMessage}**</p>
       </div>
     );
   }
 }
 
-export default InputController;
+/**
+ * Function to map the redux actions to props.
+ * @param {dict} dispatch - redux dispatcher
+ * @return {dict} - bound action creators.
+ */
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    submitCommandAction,
+  },
+  dispatch);
+}
+
+export default connect(null, mapDispatchToProps)(InputController);

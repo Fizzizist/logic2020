@@ -35,12 +35,10 @@ class Rule {
       case 'MP':
         if (this.premise1 && this.premise2) {
           if (this.premise1.getType() === 'conditional' &&
-              JSON.stringify(this.premise1.getAntecedent()) ===
-              JSON.stringify(this.premise2)) {
+              this.premise1.getAntecedent().equalsPremise(this.premise2)) {
             return this.premise1.getConsequent();
           } else if (this.premise2.getType() === 'conditional' &&
-                     JSON.stringify(this.premise2.getAntecedent()) ===
-                     JSON.stringify(this.premise1)) {
+                  this.premise2.getAntecedent().equalsPremise(this.premise1)) {
             return this.premise2.getConsequent();
           } else {
             return 'Modus Ponens cannot be performed on these premises.';

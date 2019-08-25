@@ -20,6 +20,7 @@ class InputController extends Component {
       conclusion: this.props.conclusion,
       availablePremises: this.props.premises,
       selectedPremises: [],
+      linePremises: [],
       availableRules: [mp],
       selectedRules: [],
       buttons: [],
@@ -49,7 +50,6 @@ class InputController extends Component {
         this.assumeCD}>Assume CD</button>;
       buttons.push(button);
     }
-
     // Add Premise buttons for each Premise available to the user.
     this.state.availablePremises.forEach(function(premise, _) {
       const button = <button type="button" onClick={() =>
@@ -114,11 +114,17 @@ class InputController extends Component {
     const newPremise = newRule.getResultingPremise();
     if (typeof newPremise === 'string') {
       this.setState((state) => ({
+        availablePremises: this.props.premises.concat(
+            state.linePremises),
+        selectedPremises: [],
+        inputString: '',
         errorMessage: newPremise,
       }));
     } else {
+      const newDeepCopy = Object.assign(Object.create( Object.getPrototypeOf(
+          newPremise)), newPremise);
       this.setState((state) => ({
-        selectedPremises: [newPremise],
+        selectedPremises: [newDeepCopy],
         selectedRules: [...state.selectedRules, newRule],
         inputString: state.inputString.concat(' ', rule.getName()),
         submitToggle: true,
@@ -138,9 +144,11 @@ class InputController extends Component {
       this.setState((state) => ({
         inputString: '',
         submitToggle: false,
-        availablePremises: [...state.availablePremises,
-          state.selectedPremises[0]],
+        availablePremises: this.props.premises.concat(
+            state.linePremises).concat(
+            state.selectedPremises),
         selectedPremises: [],
+        linePremises: [...state.linePremises, state.selectedPremises[0]],
         lineNumber: state.lineNumber + 1,
       }));
     }

@@ -155,6 +155,40 @@ class Premise {
       this.anteAssumed = false;
     }
   }
+
+  /**
+   * Fuction to compare two premises for equality.
+   * @param {Premise} premise - The premise being compared to this premise.
+   * @return {bool} - True or False for whether they are equal or not.
+   */
+  equalsPremise(premise) {
+    if (this.type === premise.type) {
+      switch (this.type) {
+        case 'atomic':
+          if (this.symbol === premise.symbol) return true;
+          break;
+        case 'conditional':
+          if (this.ante.equalsPremise(premise.ante) &&
+              this.cons.equalsPremise(premise.cons)) return true;
+          break;
+        case 'biconditional':
+        case 'and':
+        case 'or':
+          if ((this.premise1.equalsPremise(premise.premise1) &&
+              this.premise2.equals(premise.premise2)) ||
+              (this.premise2.equalsPremise(premise.premise1) &&
+              this.premise1.equalsPremise(premise.premise2))) return true;
+          break;
+        case 'not':
+          if (this.premise.equalsPremise(premise.premise)) return true;
+          break;
+        default:
+          return false;
+      }
+    } else {
+      return false;
+    }
+  }
 }
 
 export default Premise;

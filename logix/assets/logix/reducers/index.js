@@ -1,8 +1,5 @@
-import {NEW_SHOW} from '../actions/actionTypes';
-
-const initialState = {
-  derivation: [],
-};
+import {combineReducers} from 'redux';
+import InputReducer from './inputReducer';
 
 /**
  * The Root for all of the redux reducers.
@@ -10,13 +7,8 @@ const initialState = {
  * @param {string} action - Action being input.
  * @return {dict} - initial redux state.
  */
-function rootReducer(state = initialState, action) {
-  if (action.type === NEW_SHOW) {
-    return Object.assign({}, state, {
-      derivation: state.derivation.concat(action.payload),
-    });
-  }
-  return state;
-};
+const rootReducer = combineReducers({
+  inputPremises: InputReducer,
+});
 
 export default rootReducer;

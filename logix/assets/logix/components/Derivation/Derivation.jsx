@@ -84,7 +84,7 @@ class Derivation extends Component {
         {this.state.showing &&
           <React.Fragment>
             <Show conclusion={this.state.conclusion}
-              premises={this.state.premises}/>
+              premises={this.props.inputPremises}/>
             <InputController premises={this.state.premises}
               conclusion={this.state.conclusion}/>
           </React.Fragment>
@@ -96,6 +96,17 @@ class Derivation extends Component {
     );
   }
 }
+
+/**
+ * Function to map the redux state to the local props.
+ * @param {dict} state - The input redux state.
+ * @return {dict} - props to be mapped.
+ */
+const mapStateToProps = (state) => {
+  return {
+    inputPremises: state.inputPremises,
+  };
+};
 
 /**
  * Function to map actions to the redux state.
@@ -110,4 +121,4 @@ function mapDispatchToProps(dispatch) {
       dispatch);
 }
 
-export default connect(null, mapDispatchToProps)(Derivation);
+export default connect(mapStateToProps, mapDispatchToProps)(Derivation);

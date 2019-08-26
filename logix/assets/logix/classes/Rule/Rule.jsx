@@ -19,6 +19,13 @@ class Rule {
         }
         this.allowedPremises = 2;
         break;
+      case 'DD':
+        if (premise1) {
+          this.premise = premise1;
+          this.premiseToMatch = premise2;
+        }
+        this.allowedPremises = 1;
+        break;
     }
   }
 
@@ -45,6 +52,12 @@ class Rule {
           }
         } else {
           return 'The MP rule needs exactly two premises.';
+        }
+      case 'DD':
+        if (this.premise.equalsPremise(this.premiseToMatch)) {
+          return 'solved';
+        } else {
+          return 'That is not the correct premise for a Direct Derivation.';
         }
     }
   }

@@ -84,7 +84,8 @@ class Derivation extends Component {
         {this.state.showing &&
           <React.Fragment>
             <Show conclusion={this.state.conclusion}
-              premises={this.props.inputPremises}/>
+              premises={this.props.inputPremises} solved={
+                this.props.solved}/>
             <InputController premises={this.state.premises}
               conclusion={this.state.conclusion}/>
           </React.Fragment>
@@ -105,6 +106,7 @@ class Derivation extends Component {
 const mapStateToProps = (state) => {
   return {
     inputPremises: state.inputPremises,
+    solved: state.shows[0].solved,
   };
 };
 

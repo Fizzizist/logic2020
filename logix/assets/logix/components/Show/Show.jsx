@@ -7,7 +7,8 @@ import React from 'react';
  */
 const Show = (props) => {
   const lines = [];
-
+  let showStatement;
+  // Construct derivation lines.
   if (props.premises[0].premises.length > 0) {
     props.premises[0].premises.forEach((premise, _) => {
       lines.push(
@@ -17,13 +18,23 @@ const Show = (props) => {
     });
   }
 
+  // Construct show statement.
+  if (props.solved) {
+    showStatement = <p><strike>Show</strike> {
+      props.conclusion.getPremiseString()}</p>;
+  } else {
+    showStatement = <p>Show {props.conclusion.getPremiseString()}</p>;
+  }
+
+  // Add show statement to the front.
+  lines.unshift(showStatement);
+
   /**
    * The final HTML render from the Component.
    * @return {string} HTML containing all of the Component's elements.
    */
   return (
     <div>
-      <p>Show {props.conclusion.getPremiseString()}</p>
       {lines}
     </div>
   );

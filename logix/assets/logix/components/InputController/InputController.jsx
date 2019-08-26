@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Rule from '../../classes/Rule';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {submitCommandAction} from '../../actions';
+import {submitCommandAction, showSolved} from '../../actions';
 
 /**
  * React Component for user input into the Derivation Component.
@@ -14,6 +14,7 @@ class InputController extends Component {
    */
   constructor(props) {
     const mp = new Rule('MP');
+    const dd = new Rule('DD');
     super(props);
     this.state = {
       premises: this.props.premises,
@@ -21,7 +22,7 @@ class InputController extends Component {
       availablePremises: this.props.premises,
       selectedPremises: [],
       linePremises: [],
-      availableRules: [mp],
+      availableRules: [mp, dd],
       selectedRules: [],
       buttons: [],
       inputString: '',
@@ -104,15 +105,29 @@ class InputController extends Component {
    */
   selectRule(rule) {
     let newRule;
-    if (rule.getAllowedPremises() === 2) {
+    if (rule.getName() === 'DD') {
+      newRule = new Rule(
+          rule.getName(),
+          this.state.selectedPremises[0],
+          this.state.conclusion.getConsequent(),
+      );
+    } else if (rule.getAllowedPremises() === 2) {
       newRule = new Rule(
           rule.getName(),
           this.state.selectedPremises[0],
           this.state.selectedPremises[1]
       );
+    } else if (rule.getAllowedPremises() === 1) {
+      newRule = new Rule(
+          rule.getName(),
+          this.state.selectedPremises[0]
+      );
     }
+
     const newPremise = newRule.getResultingPremise();
-    if (typeof newPremise === 'string') {
+    if (typeof newPremise === 'string' && newPremise === 'solved') {
+      this.props.showSolved(true);
+    } else if (typeof newPremise === 'string') {
       this.setState((state) => ({
         availablePremises: this.props.premises.concat(
             state.linePremises),
@@ -181,6 +196,7 @@ class InputController extends Component {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     submitCommandAction,
+    showSolved,
   },
   dispatch);
 }

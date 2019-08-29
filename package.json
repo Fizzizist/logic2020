@@ -4,9 +4,8 @@
   "description": "",
   "main": "logix/assets/logix/index.jsx",
   "scripts": {
-    "build": "webpack --config webpack.config.js --progress --colors --mode development",
-    "watch": "webpack --config webpack.config.js --watch --mode development",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "webpack --config webpack.config.js --progess --colors --mode development",
+    "test": "mocha --recursive --require @babel/register logix/assets/tests"
   },
   "author": "Peter Vlasveld",
   "license": "ISC",
@@ -14,10 +13,7 @@
     "@babel/core": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
-    "babel-core": "^6.26.3",
-    "babel-loader": "^8.0.6",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
+    "@babel/register": "^7.5.5",
     "eslint": "^6.1.0",
     "eslint-config-google": "^0.13.0",
     "eslint-config-standard": "^13.0.1",
@@ -35,8 +31,5 @@
     "@babel/core": "^7.5.5",
     "react": "^16.9.0",
     "react-dom": "^16.9.0"
-  },
-  "scripts": {
-    "test": "mocha"
   }
 }

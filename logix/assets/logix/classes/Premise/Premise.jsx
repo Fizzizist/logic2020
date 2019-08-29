@@ -19,6 +19,7 @@ class Premise {
     this.id = id;
     this.type = type;
     this.commandText = '';
+    this.anteAssumed = false;
     switch (type) {
       case 'not':
         this.premise = premise1;
@@ -166,22 +167,22 @@ class Premise {
       switch (this.type) {
         case 'atomic':
           if (this.symbol === premise.symbol) return true;
-          break;
+          return false;
         case 'conditional':
           if (this.ante.equalsPremise(premise.ante) &&
               this.cons.equalsPremise(premise.cons)) return true;
-          break;
+          return false;
         case 'biconditional':
         case 'and':
         case 'or':
           if ((this.premise1.equalsPremise(premise.premise1) &&
-              this.premise2.equals(premise.premise2)) ||
+              this.premise2.equalsPremise(premise.premise2)) ||
               (this.premise2.equalsPremise(premise.premise1) &&
               this.premise1.equalsPremise(premise.premise2))) return true;
-          break;
+          return false;
         case 'not':
           if (this.premise.equalsPremise(premise.premise)) return true;
-          break;
+          return false;
         default:
           return false;
       }

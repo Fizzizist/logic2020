@@ -8,3 +8,4 @@ logix-venv/
 # Untracked files
 requirements.txt
 webpack-stats.json
+*.pyc

@@ -1,6 +1,7 @@
 import {NEW_SHOW, SHOW_SOLVED} from '../actions/actionTypes';
 
 const initialState = [{
+  shows: [],
   solved: false,
 }];
 
@@ -13,7 +14,7 @@ const initialState = [{
 export default function(state = initialState, action) {
   switch (action.type) {
     case NEW_SHOW:
-      return state;
+      return state.map((i) => ({...i, shows: [...i.shows, action.payload]}));
     case SHOW_SOLVED:
       return state.map((i) => ({...i, solved: action.payload}));
     default:

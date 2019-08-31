@@ -1,5 +1,6 @@
 # Untracked folders
 .idea/
+.nyc_output/
 node_modules/
 logix/static/
 logix-venv/

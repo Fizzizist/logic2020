@@ -8,8 +8,10 @@ class Rule {
    * @param {string} name - The name of the rule e.g. 'MP', 'MT'
    * @param {Premise} premise1 - The first premise analyzed by the rules.
    * @param {Premise} premise2 - The second premise if it exists.
+   * @param {Premise} premise3 - third premise to hold the conclusion in the
+   * case of a consitional derivation.
    */
-  constructor(name, premise1=null, premise2=null) {
+  constructor(name, premise1=null, premise2=null, premise3=null) {
     this.name = name;
     switch (name) {
       case 'MP':
@@ -22,7 +24,15 @@ class Rule {
       case 'DD':
         if (premise1) {
           this.premise = premise1;
-          this.premiseToMatch = premise2;
+          this.conclusion = premise2;
+        }
+        this.allowedPremises = 1;
+        break;
+      case 'CD':
+        if (premise1) {
+          this.premise = premise1;
+          this.consequent = premise2;
+          this.conclusion = premise3;
         }
         this.allowedPremises = 1;
         break;
@@ -54,10 +64,17 @@ class Rule {
           return 'The MP rule needs exactly two premises.';
         }
       case 'DD':
-        if (this.premise.equalsPremise(this.premiseToMatch)) {
-          return 'solved';
+        if (this.premise.equalsPremise(this.conclusion)) {
+          return this.premise;
         } else {
           return 'That is not the correct premise for a Direct Derivation.';
+        }
+      case 'CD':
+        if (this.premise.equalsPremise(this.consequent)) {
+          return this.conclusion;
+        } else {
+          return 'That is not the correct premise for a Conditional ' +
+            'Derivation.';
         }
     }
   }

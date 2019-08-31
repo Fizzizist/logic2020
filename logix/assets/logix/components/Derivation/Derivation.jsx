@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
 import Show from '../Show';
+import {Button} from 'react-bootstrap';
 import InputController from '../InputController';
 import Premise from '../../classes/Premise';
-import {newShow} from '../../actions/index';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+
+// Might not end up using redux.
+// import {newShow} from '../../actions/index';
+// import {connect} from 'react-redux';
+// import {bindActionCreators} from 'redux';
 
 /**
  * React Component for the Derivation. This is basically a container for the
@@ -45,18 +48,21 @@ class Derivation extends Component {
         premiseBC,
       ],
       conclusion: conc,
+      solved: false,
     };
     this.showC = this.showC.bind(this);
     this.getDerivationPremiseString =
     this.getDerivationPremiseString.bind(this);
+    this.solvedCallback = this.solvedCallback.bind(this);
   }
 
   /**
    * Toggles the show box for showing the conclusion.
    */
   showC() {
-    this.props.newShow();
-    this.setState({showing: true});
+    this.setState((state) => ({
+      showing: true,
+    }));
   }
 
   /**
@@ -73,6 +79,13 @@ class Derivation extends Component {
   }
 
   /**
+   * Callback function to Show for when the derivation is finally solved.
+   */
+  solvedCallback() {
+    this.setState({solved: true});
+  }
+
+  /**
    * The final HTML render from the Component.
    * @return {string} HTML containing all of the Component's elements.
    */
@@ -84,41 +97,49 @@ class Derivation extends Component {
         {this.state.showing &&
           <React.Fragment>
             <Show conclusion={this.state.conclusion}
-              premises={this.props.inputPremises}/>
-            <InputController premises={this.state.premises}
-              conclusion={this.state.conclusion}/>
+              inputPremises={this.props.inputPremises}
+              premises={this.state.premises}
+              solved={this.solvedCallback}/>
           </React.Fragment>
         }
         {!this.state.showing &&
-          <button type="button" onClick={this.showC}>Show Conc</button>
+          !this.state.solved &&
+          <Button type="button" onClick={this.showC}>Show Conc</Button>
+        }
+        {this.state.solved &&
+          <p>You solved it!</p>
         }
       </div>
     );
   }
 }
 
-/**
- * Function to map the redux state to the local props.
- * @param {dict} state - The input redux state.
- * @return {dict} - props to be mapped.
- */
-const mapStateToProps = (state) => {
-  return {
-    inputPremises: state.inputPremises,
-  };
-};
+// Might not actually have to use Redux at all.
 
-/**
- * Function to map actions to the redux state.
- * @param {dict} dispatch
- * @return {dict}
- */
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(
-      {
-        newShow,
-      },
-      dispatch);
-}
+// /**
+//  * Function to map the redux state to the local props.
+//  * @param {dict} state - The input redux state.
+//  * @return {dict} - props to be mapped.
+//  */
+// const mapStateToProps = (state) => {
+//   return {
+//     inputPremises: state.inputPremises,
+//     solved: state.shows[0].solved,
+//   };
+// };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Derivation);
+// /**
+//  * Function to map actions to the redux state.
+//  * @param {dict} dispatch
+//  * @return {dict}
+//  */
+// function mapDispatchToProps(dispatch) {
+//   return bindActionCreators(
+//       {
+//         newShow,
+//       },
+//       dispatch);
+// }
+
+// export default connect(mapStateToProps, mapDispatchToProps)(Derivation);
+export default Derivation;

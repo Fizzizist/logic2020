@@ -1,2 +1,2 @@
-export {newShow} from './showActions';
+export {newShow, showSolved} from './showActions';
 export {submitCommandAction} from './inputActions';

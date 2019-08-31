@@ -39,4 +39,23 @@ describe('Rule tests', function() {
         rule.getResultingPremise(),
         'The MP rule needs exactly two premises.');
   });
+  it('getResultingPremise for DD success', function() {
+    const rule = new Rule('DD', premiseA, premiseA);
+    assert.equal(rule.getResultingPremise(), premiseA);
+  });
+  it('getResultingPremise for DD fail', function() {
+    const rule = new Rule('DD', premiseA, premiseB);
+    assert.equal(rule.getResultingPremise(),
+        'That is not the correct premise for a Direct Derivation.');
+  });
+  it('getResultingPremise for CD success', function() {
+    const rule = new Rule('CD', premiseA, premiseA, premiseAB);
+    assert.equal(rule.getResultingPremise(), premiseAB);
+  });
+  it('getResultingPremise for CD fail', function() {
+    const rule = new Rule('CD', premiseA, premiseB, premiseAB);
+    assert.equal(rule.getResultingPremise(),
+        'That is not the correct premise for a Conditional ' +
+        'Derivation.');
+  });
 });

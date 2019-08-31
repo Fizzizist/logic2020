@@ -1,5 +1,9 @@
-import {NEW_SHOW} from '../actions';
+import {NEW_SHOW, SHOW_SOLVED} from '../actions/actionTypes';
 
+const initialState = [{
+  shows: [],
+  solved: false,
+}];
 
 /**
  * showReducer for holding Show objects in the redux state.
@@ -7,9 +11,13 @@ import {NEW_SHOW} from '../actions';
  * @param {string} action - Action being performed.
  * @return {dict} - new updated state.
  */
-export default function (state, action) {
+export default function(state = initialState, action) {
   switch (action.type) {
     case NEW_SHOW:
-      // TODO: put some return statement here.
+      return state.map((i) => ({...i, shows: [...i.shows, action.payload]}));
+    case SHOW_SOLVED:
+      return state.map((i) => ({...i, solved: action.payload}));
+    default:
+      return state;
   }
 }

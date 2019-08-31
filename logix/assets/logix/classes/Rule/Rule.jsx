@@ -45,18 +45,18 @@ class Rule {
    * @return {Premise | string} - Premise object which is the result of the
    * rule or an error string explaining why it didn't work.
    */
-  getResultingPremise() {
+  get resultingPremise() {
     switch (this.name) {
       // MP: check which premise is the conditional and then see if its
       // antecedent is equal to the other premise.
       case 'MP':
         if (this.premise1 && this.premise2) {
-          if (this.premise1.getType() === 'conditional' &&
-              this.premise1.getAntecedent().equalsPremise(this.premise2)) {
-            return this.premise1.getConsequent();
-          } else if (this.premise2.getType() === 'conditional' &&
-                  this.premise2.getAntecedent().equalsPremise(this.premise1)) {
-            return this.premise2.getConsequent();
+          if (this.premise1.type === 'conditional' &&
+              this.premise1.antecedent.equalsPremise(this.premise2)) {
+            return this.premise1.consequent;
+          } else if (this.premise2.type === 'conditional' &&
+                  this.premise2.antecedent.equalsPremise(this.premise1)) {
+            return this.premise2.consequent;
           } else {
             return 'Modus Ponens cannot be performed on these premises.';
           }
@@ -79,20 +79,41 @@ class Rule {
     }
   }
 
+  // ---------------------------Getters-----------------------------------------
+
   /**
    * Getter for the number of Premises that this Rule will take.
    * @return {int} - The number of allowed Premises for this Rule.
    */
-  getAllowedPremises() {
-    return this.allowedPremises;
+  get allowedPremises() {
+    return this._allowedPremises;
   }
 
   /**
    * Getter for the name of the current Rule.
    * @return {string} - Name of the current Rule.
    */
-  getName() {
-    return this.name;
+  get name() {
+    return this._name;
+  }
+
+  // ---------------------------Setters-----------------------------------------
+
+  /**
+   * Setter for the name property.
+   * @param {string} value - representing the name of the Rule.
+   */
+  set name(value) {
+    this._name = value;
+  }
+
+  /**
+   * Setter for the allowedPremises property.
+   * @param {int} value - representing number of allowed Premises for the Rule.
+   */
+  set allowedPremises(value) {
+    this._allowedPremises = value;
   }
 }
+
 export default Rule;

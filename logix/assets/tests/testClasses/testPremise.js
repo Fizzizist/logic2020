@@ -29,54 +29,54 @@ describe('Premise tests', function() {
     premise1: premiseA,
   });
   it('getPremiseString for atomic', function() {
-    assert.equal(premiseA.getPremiseString(), 'A');
+    assert.equal(premiseA.premiseString, 'A');
   });
   it('getPremiseString for conditional', function() {
-    assert.equal(premiseCond.getPremiseString(), 'A → B');
+    assert.equal(premiseCond.premiseString, 'A → B');
   });
   it('getPremiseString for biconditional', function() {
-    assert.equal(premiseBicond.getPremiseString(), 'A ↔ B');
+    assert.equal(premiseBicond.premiseString, 'A ↔ B');
   });
   it('getPremiseString for and', function() {
-    assert.equal(premiseAnd.getPremiseString(), 'A ^ B');
+    assert.equal(premiseAnd.premiseString, 'A ^ B');
   });
   it('getPremiseString for or', function() {
-    assert.equal(premiseOr.getPremiseString(), 'A v B');
+    assert.equal(premiseOr.premiseString, 'A v B');
   });
   it('getPremiseString for not', function() {
-    assert.equal(premiseNot.getPremiseString(), '~A');
+    assert.equal(premiseNot.premiseString, '~A');
   });
   it('getType', function() {
-    assert.equal(premiseA.getType(), 'atomic');
+    assert.equal(premiseA.type, 'atomic');
   });
   it('setID, getID', function() {
-    premiseA.setID('PR1');
-    assert.equal(premiseA.getID(), 'PR1');
+    premiseA.id = 'PR1';
+    assert.equal(premiseA.id, 'PR1');
   });
   it('toggleAnteAssumed, getAnteAssumed', function() {
-    assert.equal(premiseA.getAnteAssumed(), false);
+    assert.equal(premiseA.anteAssumed, false);
     premiseA.toggleAnteAssumed();
-    assert.equal(premiseA.getAnteAssumed(), true);
+    assert.equal(premiseA.anteAssumed, true);
     premiseA.toggleAnteAssumed();
-    assert.equal(premiseA.getAnteAssumed(), false);
+    assert.equal(premiseA.anteAssumed, false);
   });
   it('getAntecedent', function() {
-    const newPremise = premiseCond.getAntecedent();
-    assert.equal(newPremise.getPremiseString(), 'A');
+    const newPremise = premiseCond.antecedent;
+    assert.equal(newPremise.premiseString, 'A');
   });
   it('getConsequent', function() {
-    const newPremise = premiseCond.getConsequent();
-    assert.equal(newPremise.getPremiseString(), 'B');
+    const newPremise = premiseCond.consequent;
+    assert.equal(newPremise.premiseString, 'B');
   });
   it('setCommandText, getCommandText', function() {
-    premiseA.setCommandText('PR1 PR2 MP');
-    assert.equal(premiseA.getCommandText(), 'PR1 PR2 MP');
+    premiseA.commandText = 'PR1 PR2 MP';
+    assert.equal(premiseA.commandText, 'PR1 PR2 MP');
   });
   it('equalsPremise atomic true', function() {
-    assert.equal(premiseA.equalsPremise(premiseCond.getAntecedent()), true);
+    assert.equal(premiseA.equalsPremise(premiseCond.antecedent), true);
   });
   it('equalsPremise atomic false', function() {
-    assert.equal(premiseA.equalsPremise(premiseCond.getConsequent()), false);
+    assert.equal(premiseA.equalsPremise(premiseCond.consequent), false);
   });
   it('equalsPremise wrong type', function() {
     assert.equal(premiseA.equalsPremise(premiseCond), false);

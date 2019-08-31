@@ -72,8 +72,8 @@ class Derivation extends Component {
   getDerivationPremiseString() {
     let returnString = '';
     this.state.premises.forEach(function(premise, index) {
-      returnString = returnString + `${premise.getID()}: ` +
-      `${premise.getPremiseString()} `;
+      returnString = returnString + `${premise.id}: ` +
+      `${premise.premiseString} `;
     });
     return returnString;
   }
@@ -93,7 +93,7 @@ class Derivation extends Component {
     return (
       <div>
         <p>{this.getDerivationPremiseString()} &there4; {
-          this.state.conclusion.getPremiseString()}</p>
+          this.state.conclusion.premiseString}</p>
         {this.state.showing &&
           <React.Fragment>
             <Show conclusion={this.state.conclusion}

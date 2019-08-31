@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Button, ButtonToolbar, Modal} from 'react-bootstrap';
 import Rule from '../../classes/Rule';
+import PremiseConstructor from '../../classes/PremiseConstructor';
 
 // Might not end up using redux at all.
 // import {connect} from 'react-redux';
@@ -20,6 +21,8 @@ class InputController extends Component {
     const mp = new Rule('MP');
     const dd = new Rule('DD');
     const cd = new Rule('CD');
+    this.updateShowModal = this.updateShowModal.bind(this);
+    const premiseConstructor = new PremiseConstructor(this.updateShowModal);
     this.state = {
       premises: this.props.premises,
       conclusion: this.props.conclusion,
@@ -34,12 +37,15 @@ class InputController extends Component {
       errorMessage: '',
       lineNumber: 1,
       showShowMenuModal: false,
+      premiseConstructor: premiseConstructor,
+      showMenuString: '',
     };
     this.constructButtons = this.constructButtons.bind(this);
     this.selectPremise = this.selectPremise.bind(this);
     this.assumeCD = this.assumeCD.bind(this);
     this.submitCommand = this.submitCommand.bind(this);
     this.toggleShowMenu = this.toggleShowMenu.bind(this);
+
   }
 
   /**
@@ -56,8 +62,8 @@ class InputController extends Component {
     buttons.push(showButton);
 
     // Add buttons for Assume statements.
-    if (this.state.conclusion.getType() === 'conditional' &&
-        !this.state.conclusion.getAnteAssumed()) {
+    if (this.state.conclusion.type === 'conditional' &&
+        !this.state.conclusion.anteAssumed) {
       const button = <Button onClick={
         this.assumeCD}>Assume CD</Button>;
       buttons.push(button);
@@ -65,15 +71,15 @@ class InputController extends Component {
     // Add Premise buttons for each Premise available to the user.
     this.state.availablePremises.forEach(function(premise, _) {
       const button = <Button onClick={() => this.selectPremise(premise)
-      }>{premise.getID()}</Button>;
+      }>{premise.id}</Button>;
       buttons.push(button);
     }.bind(this));
 
     // Generate buttons for Rules
     this.state.availableRules.forEach(function(rule, _) {
-      if (this.state.selectedPremises.length === rule.getAllowedPremises()) {
+      if (this.state.selectedPremises.length === rule.allowedPremises) {
         const button = <Button onClick={() =>this.selectRule(rule)
-        }>{rule.getName()}</Button>;
+        }>{rule.name}</Button>;
         buttons.push(button);
       }
     }.bind(this));
@@ -87,7 +93,7 @@ class InputController extends Component {
   assumeCD() {
     this.setState((state) => ({
       selectedPremises: [...state.selectedPremises,
-        state.conclusion.getAntecedent()],
+        state.conclusion.antecedent],
       inputString: state.inputString.concat('Ass CD'),
       submitToggle: true,
     }));
@@ -103,8 +109,8 @@ class InputController extends Component {
     this.setState((state) => ({
       selectedPremises: [...state.selectedPremises, premise],
       availablePremises: state.availablePremises.filter(
-          (p) => p.getID() !== premise.getID()),
-      inputString: state.inputString.concat(' ', premise.getID()),
+          (p) => p.id !== premise.id),
+      inputString: state.inputString.concat(' ', premise.id),
     }));
   }
 
@@ -114,33 +120,33 @@ class InputController extends Component {
    */
   selectRule(rule) {
     let newRule;
-    if (rule.getName() === 'DD') {
+    if (rule.name === 'DD') {
       newRule = new Rule(
-          rule.getName(),
+          rule.name,
           this.state.selectedPremises[0],
           this.state.conclusion,
       );
-    } else if (rule.getName() === 'CD') {
+    } else if (rule.name === 'CD') {
       newRule = new Rule(
-          rule.getName(),
+          rule.name,
           this.state.selectedPremises[0],
-          this.state.conclusion.getConsequent(),
+          this.state.conclusion.consequent,
           this.state.conclusion
       );
-    } else if (rule.getAllowedPremises() === 2) {
+    } else if (rule.allowedPremises === 2) {
       newRule = new Rule(
-          rule.getName(),
+          rule.name,
           this.state.selectedPremises[0],
           this.state.selectedPremises[1]
       );
-    } else if (rule.getAllowedPremises() === 1) {
+    } else if (rule.allowedPremises === 1) {
       newRule = new Rule(
-          rule.getName(),
+          rule.name,
           this.state.selectedPremises[0]
       );
     }
 
-    const newPremise = newRule.getResultingPremise();
+    const newPremise = newRule.resultingPremise;
     if (typeof newPremise === 'string') {
       this.setState((state) => ({
         availablePremises: this.props.premises.concat(
@@ -155,7 +161,7 @@ class InputController extends Component {
       this.setState((state) => ({
         selectedPremises: [newDeepCopy],
         selectedRules: [...state.selectedRules, newRule],
-        inputString: state.inputString.concat(' ', rule.getName()),
+        inputString: state.inputString.concat(' ', rule.name),
         submitToggle: true,
       }));
     }
@@ -167,8 +173,8 @@ class InputController extends Component {
    */
   submitCommand() {
     if (this.state.selectedPremises.length === 1) {
-      this.state.selectedPremises[0].setID(this.state.lineNumber.toString());
-      this.state.selectedPremises[0].setCommandText(this.state.inputString);
+      this.state.selectedPremises[0].id = this.state.lineNumber.toString();
+      this.state.selectedPremises[0].commandText = this.state.inputString;
       this.props.submitCommand(this.state.selectedPremises[0]);
       this.setState((state) => ({
         inputString: '',
@@ -190,7 +196,9 @@ class InputController extends Component {
     if (this.state.showShowMenuModal) {
       this.setState((state) => ({
         showShowMenuModal: false,
+        showMenuString: '',
       }));
+      this.state.premiseConstructor.premiseString = '';
     } else {
       this.setState((state) => ({
         showShowMenuModal: true,
@@ -199,12 +207,30 @@ class InputController extends Component {
   }
 
   /**
+   * Callback function passed into PremiseConstructor in order to update
+   * this component's state when a button is pressed in the modal.
+   */
+  updateShowModal() {
+    this.setState((state) => ({
+      showMenuString: this.state.premiseConstructor.premiseString,
+    }));
+  }
+
+  /**
+   * Function to get the custom premise from the PremiseConstructor and feed
+   * it to the new show.
+   * @return {Premise} - Premise from PremiseConstructor.
+   */
+  showCustomPremise() {
+    return this.state.premiseConstructor.resultingPremise;
+  }
+
+  /**
    * The final HTML render from the Component.
    * @return {string} HTML containing all of the Component's elements.
    */
   render() {
     const buttons = this.constructButtons();
-    // const showMenuButtons = this.constructShowMenuButtons();
     return (
       <div>
         <ButtonToolbar>
@@ -215,12 +241,16 @@ class InputController extends Component {
           this.toggleShowMenu
         }>
           <Modal.Header>
-            <Modal.Title>{this.customShowContent}
+            <Modal.Title>{this.state.showMenuString}
               <Button type="submit" onClick={() =>
-                this.props.newShow(this.customShowContent)}>Submit</Button>
+                this.props.newShow(this.customShowPremise)}>Submit</Button>
             </Modal.Title>
           </Modal.Header>
-          <Modal.Body>#Menu Buttons</Modal.Body>
+          <Modal.Body>
+            <ButtonToolbar>
+              {this.state.premiseConstructor.buttons}
+            </ButtonToolbar>
+          </Modal.Body>
         </Modal>
 
         <p>Command: {this.state.inputString}</p>

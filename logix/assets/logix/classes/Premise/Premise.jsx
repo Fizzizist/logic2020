@@ -47,30 +47,56 @@ class Premise {
    * Getter for the string of the premise.
    * @return {string} - String representing the premise.
    */
-  getPremiseString() {
+  get premiseString() {
+    let prem1Str;
+    let prem2Str;
+    // Bracketed switch. Below switch doesn't run if these are true.
     switch (this.type) {
       case 'atomic':
         return this.symbol;
-        break;
       case 'not':
-        return `~${this.premise.getPremiseString()}`;
-        break;
+        if (this.premise.type !== 'atomic' && this.premise.type !== 'not') {
+          return `~(${this.premise.premiseString})`;
+        } else {
+          return `~${this.premise.premiseString}`;
+        }
       case 'conditional':
-        return `${this.ante.getPremiseString()} → ` +
-          `${this.cons.getPremiseString()}`;
+        if (this.ante.type !== 'atomic' && this.ante.type !== 'not') {
+          prem1Str = `(${this.ante.premiseString})`;
+        } else {
+          prem1Str = this.ante.premiseString;
+        }
+        if (this.cons.type !== 'atomic' && this.cons.type !== 'not') {
+          prem2Str = `(${this.cons.premiseString})`;
+        } else {
+          prem2Str = this.cons.premiseString;
+        }
         break;
       case 'biconditional':
-        return `${this.premise1.getPremiseString()} ↔ ` +
-          `${this.premise2.getPremiseString()}`;
-        break;
-      case 'and':
-        return `${this.premise1.getPremiseString()} ^ ` +
-          `${this.premise2.getPremiseString()}`;
-        break;
       case 'or':
-        return `${this.premise1.getPremiseString()} v ` +
-          `${this.premise2.getPremiseString()}`;
+      case 'and':
+        if (this.premise1.type !== 'atomic' && this.premise1.type !== 'not') {
+          prem1Str = `(${this.premise1.premiseString})`;
+        } else {
+          prem1Str = this.premise1.premiseString;
+        }
+        if (this.premise2.type !== 'atomic' && this.premise2.type !== 'not') {
+          prem2Str = `(${this.premise2.premiseString})`;
+        } else {
+          prem2Str = this.premise2.premiseString;
+        }
         break;
+    }
+    // Print with symbol.
+    switch (this.type) {
+      case 'conditional':
+        return `${prem1Str} → ${prem2Str}`;
+      case 'biconditional':
+        return `${prem1Str} ↔ ${prem2Str}`;
+      case 'and':
+        return `${prem1Str} ^ ${prem2Str}`;
+      case 'or':
+        return `${prem1Str} v ${prem2Str}`;
     }
   }
 
@@ -78,24 +104,24 @@ class Premise {
    * Getter for the type of the Premise.
    * @return {string} - String representing the type of the premise.
    */
-  getType() {
-    return this.type;
+  get type() {
+    return this._type;
   }
 
   /**
    * Getter for the short identifier of the premise.
    * @return {string} - String representing the identifier for the premise.
    */
-  getID() {
-    return this.id;
+  get id() {
+    return this._id;
   }
 
   /**
    * Getter for assumed variable if the premise is of conditional type.
    * @return {bool} - Boolean representing the state of the antiAssumed variable
    */
-  getAnteAssumed() {
-    return this.anteAssumed;
+  get anteAssumed() {
+    return this._anteAssumed;
   }
 
   /**
@@ -103,7 +129,7 @@ class Premise {
    * @return {Premise} - Premise object which is the antecedent in the
    * conditional.
    */
-  getAntecedent() {
+  get antecedent() {
     return this.ante;
   }
 
@@ -112,7 +138,7 @@ class Premise {
    * @return {Premise} - Premise object which is the consequent in the
    * conditional.
    */
-  getConsequent() {
+  get consequent() {
     return this.cons;
   }
 
@@ -121,18 +147,18 @@ class Premise {
    * by a command.
    * @return {string} - command text.
    */
-  getCommandText() {
-    return this.commandText;
+  get commandText() {
+    return this._commandText;
   }
 
   // ---------------------------------Setters-----------------------------------
 
   /**
    * Setter for id allowing the ID to be changed.
-   * @param {string} id - The new ID for the Premise.
+   * @param {string} value - The new ID for the Premise.
    */
-  setID(id) {
-    this.id = id;
+  set id(value) {
+    this._id = value;
   }
 
   /**
@@ -140,8 +166,25 @@ class Premise {
    * sent to the Show window.
    * @param {string} cText - The command string.
    */
-  setCommandText(cText) {
-    this.commandText = cText;
+  set commandText(cText) {
+    this._commandText = cText;
+  }
+
+  /**
+   * Setter for the type property
+   * @param {string} value - representing the type of Premise.
+   */
+  set type(value) {
+    this._type = value;
+  }
+
+  /**
+   * Setter for the anteAssumed property
+   * @param {boolean} value - representing whether the antecedent has been
+   * assumed for conditional premise.
+   */
+  set anteAssumed(value) {
+    this._anteAssumed = value;
   }
 
   // -------------------------------Other Functions-----------------------------
@@ -188,6 +231,41 @@ class Premise {
       }
     } else {
       return false;
+    }
+  }
+
+  /**
+   * Validator for Premise integrity.
+   * @return {boolean} - indicating validation of premise.
+   */
+  isValid() {
+    const atomicsArray =
+    ['P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+    switch (this.type) {
+      case 'atomic':
+        if (atomicsArray.includes(this.symbol)) return true;
+        else return false;
+      case 'conditional':
+        if (typeof this.ante === 'string' || typeof this.cons === 'string') {
+          return false;
+        }
+        if (this.ante.isValid() && this.cons.isValid()) return true;
+        else return false;
+      case 'and':
+      case 'or':
+      case 'biconditional':
+        if (typeof this.premise1 === 'string' ||
+            typeof this.premise2 === 'string') {
+          return false;
+        }
+        if (this.premise1.isValid() && this.premise2.isValid()) return true;
+        else return false;
+      case 'not':
+        if (typeof this.premise === 'string') return false;
+        if (this.premise.isValid()) return true;
+        else return false;
+      default:
+        return false;
     }
   }
 }

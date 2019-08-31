@@ -32,8 +32,8 @@ class Show extends Component {
     if (this.state.linePremises.length > 0) {
       this.state.linePremises.forEach((premise, _) => {
         lines.push(
-            <p>{premise.getID()}: {premise.getCommandText()} {
-              premise.getPremiseString()}</p>
+            <p>{premise.id}: {premise.commandText} {
+              premise.premiseString}</p>
         );
       });
     }
@@ -41,9 +41,9 @@ class Show extends Component {
     // Construct show statement.
     if (this.state.solved) {
       showStatement = <p><strike>Show</strike> {
-        this.props.conclusion.getPremiseString()}</p>;
+        this.props.conclusion.premiseString}</p>;
     } else {
-      showStatement = <p>Show {this.props.conclusion.getPremiseString()}</p>;
+      showStatement = <p>Show {this.props.conclusion.premiseString}</p>;
     }
 
     // Add show statement to the front.
@@ -66,6 +66,17 @@ class Show extends Component {
     }
     this.setState((state) => ({
       linePremises: [...state.linePremises, premise],
+    }));
+  }
+
+  /**
+   * callback function to instantiate a new child Show for this show.
+   * @param {Premise} customPremise - The Premise to show from the new Show.
+   */
+  newShow(customPremise) {
+    this.setState((state) => ({
+      childShow: true,
+      childConclusion: customPremise,
     }));
   }
 

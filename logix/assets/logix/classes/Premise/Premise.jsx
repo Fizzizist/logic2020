@@ -190,17 +190,6 @@ class Premise {
   // -------------------------------Other Functions-----------------------------
 
   /**
-   * Toggle for assumed variable if the premise is of conditional type.
-   */
-  toggleAnteAssumed() {
-    if (!this.anteAssumed) {
-      this.anteAssumed = true;
-    } else {
-      this.anteAssumed = false;
-    }
-  }
-
-  /**
    * Fuction to compare two premises for equality.
    * @param {Premise} premise - The premise being compared to this premise.
    * @return {bool} - True or False for whether they are equal or not.

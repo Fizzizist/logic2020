@@ -45,7 +45,6 @@ class InputController extends Component {
     this.assumeCD = this.assumeCD.bind(this);
     this.submitCommand = this.submitCommand.bind(this);
     this.toggleShowMenu = this.toggleShowMenu.bind(this);
-
   }
 
   /**
@@ -222,7 +221,9 @@ class InputController extends Component {
    * @return {Premise} - Premise from PremiseConstructor.
    */
   showCustomPremise() {
-    return this.state.premiseConstructor.resultingPremise;
+    const newPremise = this.state.premiseConstructor.resultingPremise;
+    this.toggleShowMenu();
+    return newPremise;
   }
 
   /**
@@ -243,7 +244,7 @@ class InputController extends Component {
           <Modal.Header>
             <Modal.Title>{this.state.showMenuString}
               <Button type="submit" onClick={() =>
-                this.props.newShow(this.customShowPremise)}>Submit</Button>
+                this.props.newShow(this.showCustomPremise())}>Submit</Button>
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>

@@ -20,6 +20,7 @@ class Show extends Component {
     };
     this.constructLines = this.constructLines.bind(this);
     this.submitCommandCallback = this.submitCommandCallback.bind(this);
+    this.newShow = this.newShow.bind(this);
   }
 
   /**
@@ -89,14 +90,15 @@ class Show extends Component {
     return (
       <div>
         {lines}
-        {!this.solved &&
-          !this.childShow &&
+        {!this.state.solved &&
+          !this.state.childShow &&
         <InputController premises={this.props.premises}
           conclusion={this.props.conclusion}
-          submitCommand={this.submitCommandCallback}/>
+          submitCommand={this.submitCommandCallback}
+          newShow={this.newShow}/>
         }
         {this.state.childShow &&
-        <Show premises={this.state.premises}
+        <Show premises={this.props.premises}
           conclusion={this.state.childConclusion}/>
         }
       </div>

@@ -20,9 +20,9 @@ class Derivation extends Component {
    */
   constructor(props) {
     super(props);
-    const premiseA = new Premise({type: 'atomic', premise1: 'A'});
-    const premiseB = new Premise({type: 'atomic', premise1: 'B'});
-    const premiseC = new Premise({type: 'atomic', premise1: 'C'});
+    const premiseA = new Premise({type: 'atomic', premise1: 'P'});
+    const premiseB = new Premise({type: 'atomic', premise1: 'Q'});
+    const premiseC = new Premise({type: 'atomic', premise1: 'R'});
     const premiseAB = new Premise({
       type: 'conditional',
       premise1: premiseA,

@@ -17,12 +17,6 @@ class Rule {
     this.name = name;
     switch (name) {
       case 'MP':
-        if (premise1 && premise2) {
-          this.premise1 = premise1;
-          this.premise2 = premise2;
-        }
-        this.allowedPremises = 2;
-        break;
       case 'MT':
         if (premise1 && premise2) {
           this.premise1 = premise1;
@@ -30,15 +24,23 @@ class Rule {
         }
         this.allowedPremises = 2;
         break;
+      case 'ID':
+        if (premise1 && premise2 && premise3) {
+          this.premise1 = premise1;
+          this.premise2 = premise2;
+          this.conclusion = premise3;
+        }
+        this.allowedPremises = 2;
+        break;
       case 'DD':
-        if (premise1) {
+        if (premise1 && premise2) {
           this.premise = premise1;
           this.conclusion = premise2;
         }
         this.allowedPremises = 1;
         break;
       case 'CD':
-        if (premise1) {
+        if (premise1 && premise2 && premise3) {
           this.premise = premise1;
           this.consequent = premise2;
           this.conclusion = premise3;
@@ -115,6 +117,20 @@ class Rule {
         } else {
           return 'That is not the correct premise for a Conditional ' +
             'Derivation.';
+        }
+      // ID: Indirect Derivation: Check to see if the two premises are exact
+      // logical opposites. If so, this implies a contradiction which solves the
+      // show.
+      case 'ID':
+        if (this.premise1.type === 'not' &&
+            this.premise2.equalsPremise(this.premise1.negated)) {
+          return this.conclusion;
+        } else if (this.premise2.type === 'not' &&
+            this.premise1.equalsPremise(this.premise2.negated)) {
+          return this.conclusion;
+        } else {
+          return 'Cannot perform an Indirect Derivation with the provided ' +
+            'Premises';
         }
     }
   }

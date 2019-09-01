@@ -53,13 +53,6 @@ describe('Premise tests', function() {
     premiseA.id = 'PR1';
     assert.equal(premiseA.id, 'PR1');
   });
-  it('toggleAnteAssumed, getAnteAssumed', function() {
-    assert.equal(premiseA.anteAssumed, false);
-    premiseA.toggleAnteAssumed();
-    assert.equal(premiseA.anteAssumed, true);
-    premiseA.toggleAnteAssumed();
-    assert.equal(premiseA.anteAssumed, false);
-  });
   it('getAntecedent', function() {
     const newPremise = premiseCond.antecedent;
     assert.equal(newPremise.premiseString, 'A');

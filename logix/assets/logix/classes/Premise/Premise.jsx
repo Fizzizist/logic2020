@@ -117,14 +117,6 @@ class Premise {
   }
 
   /**
-   * Getter for assumed variable if the premise is of conditional type.
-   * @return {bool} - Boolean representing the state of the antiAssumed variable
-   */
-  get anteAssumed() {
-    return this._anteAssumed;
-  }
-
-  /**
    * Getter for the antecedent Premise object if type is 'conditional'
    * @return {Premise} - Premise object which is the antecedent in the
    * conditional.
@@ -176,15 +168,6 @@ class Premise {
    */
   set type(value) {
     this._type = value;
-  }
-
-  /**
-   * Setter for the anteAssumed property
-   * @param {boolean} value - representing whether the antecedent has been
-   * assumed for conditional premise.
-   */
-  set anteAssumed(value) {
-    this._anteAssumed = value;
   }
 
   // -------------------------------Other Functions-----------------------------

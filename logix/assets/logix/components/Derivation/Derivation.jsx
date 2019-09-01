@@ -96,10 +96,11 @@ class Derivation extends Component {
           this.state.conclusion.premiseString}</p>
         {this.state.showing &&
           <React.Fragment>
-            <Show conclusion={this.state.conclusion}
-              inputPremises={this.props.inputPremises}
+            <Show lastNumber={1}
+              conclusion={this.state.conclusion}
               premises={this.state.premises}
-              solved={this.solvedCallback}/>
+              solved={this.solvedCallback}
+              outerPremises={[]}/>
           </React.Fragment>
         }
         {!this.state.showing &&

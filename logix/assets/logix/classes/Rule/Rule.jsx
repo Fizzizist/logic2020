@@ -1,3 +1,5 @@
+import Premise from '../Premise';
+
 /**
  * Generalized Rule class to represent all logical rules in the game for example
  * MP, MT, etc.
@@ -15,6 +17,13 @@ class Rule {
     this.name = name;
     switch (name) {
       case 'MP':
+        if (premise1 && premise2) {
+          this.premise1 = premise1;
+          this.premise2 = premise2;
+        }
+        this.allowedPremises = 2;
+        break;
+      case 'MT':
         if (premise1 && premise2) {
           this.premise1 = premise1;
           this.premise2 = premise2;
@@ -47,8 +56,8 @@ class Rule {
    */
   get resultingPremise() {
     switch (this.name) {
-      // MP: check which premise is the conditional and then see if its
-      // antecedent is equal to the other premise.
+      // MP: Modus Ponens: check which premise is the conditional and then see
+      // if its antecedent is equal to the other premise.
       case 'MP':
         if (this.premise1 && this.premise2) {
           if (this.premise1.type === 'conditional' &&
@@ -63,12 +72,43 @@ class Rule {
         } else {
           return 'The MP rule needs exactly two premises.';
         }
+      // MT: Modus Tolens: check which premise is not and then see if its
+      // inner negated premise is the same as the conditional consequent.
+      // if so then return the negated conditional antecedent.
+      case 'MT':
+        if (this.premise1.type === 'not' &&
+          this.premise2.type === 'conditional') {
+          if (this.premise1.premise.equalsPremise(this.premise2.consequent)) {
+            const newPremise = new Premise({
+              type: 'not',
+              premise1: this.premise2.antecedent,
+            });
+            return newPremise;
+          } else {
+            return 'Negated Premise does not match conditional consquent.';
+          }
+        } else if (this.premise2.type === 'not' &&
+                   this.premise1.type === 'conditional') {
+          if (this.premise2.premise.equalsPremise(this.premise1.consequent)) {
+            const newPremise = new Premise({
+              type: 'not',
+              premise1: this.premise1.antecedent,
+            });
+            return newPremise;
+          } else {
+            return 'Negated Premise does not match conditional consquent.';
+          }
+        } else {
+          'Modus Tolens cannot be performed on these two premises.';
+        }
+      // DD: Direct Derivation: Check if the premise matches the conclusion.
       case 'DD':
         if (this.premise.equalsPremise(this.conclusion)) {
           return this.premise;
         } else {
           return 'That is not the correct premise for a Direct Derivation.';
         }
+      // CD: Conditional Derivation: Check if the premise matches the consequent
       case 'CD':
         if (this.premise.equalsPremise(this.consequent)) {
           return this.conclusion;

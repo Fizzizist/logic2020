@@ -23,6 +23,7 @@ class InputController extends Component {
     const dd = new Rule('DD');
     const cd = new Rule('CD');
     const mt = new Rule('MT');
+    const idRule = new Rule('ID');
     this.updateShowModal = this.updateShowModal.bind(this);
     const premiseConstructor = new PremiseConstructor(this.updateShowModal);
     this.state = {
@@ -31,7 +32,7 @@ class InputController extends Component {
       availablePremises: this.props.premises.concat(this.props.linePremises),
       selectedPremises: [],
       linePremises: this.props.linePremises,
-      availableRules: [mp, mt, dd, cd],
+      availableRules: [mp, mt, dd, cd, idRule],
       selectedRules: [],
       buttons: [],
       inputString: '',
@@ -160,30 +161,47 @@ class InputController extends Component {
    */
   selectRule(rule) {
     let newRule;
-    if (rule.name === 'DD') {
-      newRule = new Rule(
-          rule.name,
-          this.state.selectedPremises[0],
-          this.state.conclusion,
-      );
-    } else if (rule.name === 'CD') {
-      newRule = new Rule(
-          rule.name,
-          this.state.selectedPremises[0],
-          this.state.conclusion.consequent,
-          this.state.conclusion
-      );
-    } else if (rule.allowedPremises === 2) {
-      newRule = new Rule(
-          rule.name,
-          this.state.selectedPremises[0],
-          this.state.selectedPremises[1]
-      );
+    if (rule.allowedPremises === 2) {
+      switch (rule.name) {
+        case 'ID':
+          newRule = new Rule(
+              rule.name,
+              this.state.selectedPremises[0],
+              this.state.selectedPremises[1],
+              this.state.conclusion,
+          );
+          break;
+        default:
+          newRule = new Rule(
+              rule.name,
+              this.state.selectedPremises[0],
+              this.state.selectedPremises[1]
+          );
+      }
     } else if (rule.allowedPremises === 1) {
-      newRule = new Rule(
-          rule.name,
-          this.state.selectedPremises[0]
-      );
+      switch (rule.name) {
+        case 'DD':
+          newRule = new Rule(
+              rule.name,
+              this.state.selectedPremises[0],
+              this.state.conclusion,
+          );
+          break;
+        case 'CD':
+          newRule = new Rule(
+              rule.name,
+              this.state.selectedPremises[0],
+              this.state.conclusion.consequent,
+              this.state.conclusion
+          );
+          break;
+        default:
+          newRule = new Rule(
+              rule.name,
+              this.state.selectedPremises[0]
+          );
+          break;
+      }
     }
 
     const newPremise = newRule.resultingPremise;

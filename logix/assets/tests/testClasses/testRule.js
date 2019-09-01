@@ -11,6 +11,7 @@ describe('Rule tests', function() {
     premise1: premiseA,
     premise2: premiseB,
   });
+  const premiseNot = new Premise({type: 'not', premise1: premiseA});
   it('getName', function() {
     assert.equal(ruleMP.name, 'MP');
   });
@@ -57,5 +58,15 @@ describe('Rule tests', function() {
     assert.equal(rule.resultingPremise,
         'That is not the correct premise for a Conditional ' +
         'Derivation.');
+  });
+  it('getResultingPremise for ID success', function() {
+    const rule = new Rule('ID', premiseA, premiseNot, premiseAB);
+    assert.equal(rule.resultingPremise, premiseAB);
+  });
+  it('getResultingPremise for ID fail', function() {
+    const rule = new Rule('ID', premiseB, premiseNot, premiseAB);
+    assert.equal(rule.resultingPremise,
+        'Cannot perform an Indirect Derivation with the provided ' +
+        'Premises');
   });
 });

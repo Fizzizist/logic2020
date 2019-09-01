@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Button, ButtonToolbar, Modal} from 'react-bootstrap';
 import Rule from '../../classes/Rule';
 import PremiseConstructor from '../../classes/PremiseConstructor';
+import Premise from '../../classes/Premise';
 
 // Might not end up using redux at all.
 // import {connect} from 'react-redux';
@@ -39,10 +40,12 @@ class InputController extends Component {
       showShowMenuModal: false,
       premiseConstructor: premiseConstructor,
       showMenuString: '',
+      assumed: false,
     };
     this.constructButtons = this.constructButtons.bind(this);
     this.selectPremise = this.selectPremise.bind(this);
     this.assumeCD = this.assumeCD.bind(this);
+    this.assumeID = this.assumeID.bind(this);
     this.submitCommand = this.submitCommand.bind(this);
     this.toggleShowMenu = this.toggleShowMenu.bind(this);
   }
@@ -62,11 +65,16 @@ class InputController extends Component {
 
     // Add buttons for Assume statements.
     if (this.state.conclusion.type === 'conditional' &&
-        !this.state.conclusion.anteAssumed) {
+        !this.state.assumed) {
       const button = <Button onClick={
         this.assumeCD}>Assume CD</Button>;
       buttons.push(button);
     }
+    if (!this.state.assumed) {
+      const button = <Button onClick={this.assumeID}>Assume ID</Button>;
+      buttons.push(button);
+    }
+
     // Add Premise buttons for each Premise available to the user.
     this.state.availablePremises.forEach(function(premise, _) {
       const button = <Button onClick={() => this.selectPremise(premise)
@@ -95,8 +103,25 @@ class InputController extends Component {
         state.conclusion.antecedent],
       inputString: state.inputString.concat('Ass CD'),
       submitToggle: true,
+      assumed: true,
     }));
-    this.state.conclusion.toggleAnteAssumed();
+  }
+
+  /**
+   * on-click function for Assume ID button that allows the user to assume
+   * the negation of the conclusion in order to generate a contradiction.
+   */
+  assumeID() {
+    const negatedConclusion = new Premise({
+      type: 'not',
+      premise1: this.state.conclusion,
+    });
+    this.setState((state) => ({
+      selectedPremises: [...state.selectedPremises, negatedConclusion],
+      inputString: state.inputString.concat('Ass ID'),
+      submitToggle: true,
+      assumed: true,
+    }));
   }
 
   /**

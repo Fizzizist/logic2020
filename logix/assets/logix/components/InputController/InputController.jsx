@@ -46,6 +46,7 @@ class InputController extends Component {
     this.selectPremise = this.selectPremise.bind(this);
     this.assumeCD = this.assumeCD.bind(this);
     this.assumeID = this.assumeID.bind(this);
+    this.showCons = this.showCons.bind(this);
     this.submitCommand = this.submitCommand.bind(this);
     this.toggleShowMenu = this.toggleShowMenu.bind(this);
   }
@@ -60,8 +61,14 @@ class InputController extends Component {
     const buttons = [];
 
     // Add custom Show buttons
-    const showButton = <Button onClick={this.toggleShowMenu}>Show</Button>;
-    buttons.push(showButton);
+    const showCustomButton =
+    <Button onClick={this.toggleShowMenu}>Show Custom</Button>;
+    buttons.push(showCustomButton);
+    if (this.state.conclusion.type === 'conditional') {
+      const showConsButton =
+      <Button onClick={this.showCons}>Show Cons</Button>;
+      buttons.push(showConsButton);
+    }
 
     // Add buttons for Assume statements.
     if (this.state.conclusion.type === 'conditional' &&
@@ -122,6 +129,14 @@ class InputController extends Component {
       submitToggle: true,
       assumed: true,
     }));
+  }
+
+  /**
+   * On-Click function for Show Cons that allows the user to show the consequent
+   * of the conditional conclusion in one click.
+   */
+  showCons() {
+    this.props.newShow(this.state.conclusion.consequent);
   }
 
   /**

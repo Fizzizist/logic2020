@@ -13,10 +13,13 @@ class Show extends Component {
    */
   constructor(props) {
     super(props);
+    this.props.conclusion.id = this.props.lastNumber.toString();
     this.state = {
       childShow: false,
+      outerPremises: this.props.outerPremises,
       linePremises: [],
       solved: false,
+      lineNumber: this.props.lastNumber + 1,
     };
     this.constructLines = this.constructLines.bind(this);
     this.submitCommandCallback = this.submitCommandCallback.bind(this);
@@ -41,10 +44,11 @@ class Show extends Component {
 
     // Construct show statement.
     if (this.state.solved) {
-      showStatement = <p><strike>Show</strike> {
+      showStatement = <p>{this.props.conclusion.id}: <strike>Show</strike> {
         this.props.conclusion.premiseString}</p>;
     } else {
-      showStatement = <p>Show {this.props.conclusion.premiseString}</p>;
+      showStatement = <p>{this.props.conclusion.id}: Show {
+        this.props.conclusion.premiseString}</p>;
     }
 
     // Add show statement to the front.
@@ -67,6 +71,7 @@ class Show extends Component {
     }
     this.setState((state) => ({
       linePremises: [...state.linePremises, premise],
+      lineNumber: state.lineNumber + 1,
     }));
   }
 
@@ -95,11 +100,15 @@ class Show extends Component {
         <InputController premises={this.props.premises}
           conclusion={this.props.conclusion}
           submitCommand={this.submitCommandCallback}
-          newShow={this.newShow}/>
+          newShow={this.newShow}
+          lineNumber={this.state.lineNumber}
+          linePremises={this.state.outerPremises}/>
         }
         {this.state.childShow &&
         <Show premises={this.props.premises}
-          conclusion={this.state.childConclusion}/>
+          conclusion={this.state.childConclusion}
+          lastNumber={this.state.lineNumber}
+          outerPremises={this.state.linePremises}/>
         }
       </div>
     );

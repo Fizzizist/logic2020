@@ -7,6 +7,9 @@ This project uses Trunk-Based Development which means there is a specific and pr
 3. Either fork the repo or make a branch with the title `[issue number]-[your initials]-[title of the issue]`
 4. Submit a pull request with `closes [issue number]` in the description and assign someone else to review it.
 5. Once it passes CI it can be merged into master.
+
+* Make sure all code is readable: has proper docstring.
+* Make sure code is tested. CI is set to fail is coverage falls below 70% for the files that are tracked.
 * Master should always be a working, up to date build. 
 * Edits should always take place on a side branch and then be merged into master. 
 * Branches should not be open very long, and should consist of small, easy to manage changes.

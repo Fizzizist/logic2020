@@ -143,6 +143,13 @@ class Premise {
     return this._commandText;
   }
 
+  /**
+   * Getter for negated premise is type is 'not'
+   */
+  get negated() {
+    return this.premise;
+  }
+
   // ---------------------------------Setters-----------------------------------
 
   /**

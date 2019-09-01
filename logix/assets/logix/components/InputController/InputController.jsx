@@ -22,6 +22,7 @@ class InputController extends Component {
     const mp = new Rule('MP');
     const dd = new Rule('DD');
     const cd = new Rule('CD');
+    const mt = new Rule('MT');
     this.updateShowModal = this.updateShowModal.bind(this);
     const premiseConstructor = new PremiseConstructor(this.updateShowModal);
     this.state = {
@@ -30,7 +31,7 @@ class InputController extends Component {
       availablePremises: this.props.premises.concat(this.props.linePremises),
       selectedPremises: [],
       linePremises: this.props.linePremises,
-      availableRules: [mp, dd, cd],
+      availableRules: [mp, mt, dd, cd],
       selectedRules: [],
       buttons: [],
       inputString: '',

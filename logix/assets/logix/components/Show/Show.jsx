@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import InputController from '../InputController';
+import {Table} from 'react-bootstrap';
 
 /**
  * React component that displays the output of a particular Show.
@@ -16,8 +17,8 @@ class Show extends Component {
     this.props.conclusion.id = this.props.lastNumber.toString();
     this.state = {
       displayDict: {
-        lines: [<p>{this.props.lastNumber}: Show {
-          this.props.conclusion.premiseString}</p>],
+        lines: [<tr><td>{this.props.lastNumber}</td><td>Show {
+          this.props.conclusion.premiseString}</td><td></td></tr>],
       },
       childShow: false,
       outerPremises: this.props.outerPremises,
@@ -51,8 +52,8 @@ class Show extends Component {
    * @param {Premise} premise - Premise being passed out of the controller.
    */
   submitCommandCallback(premise) {
-    const newElement = <p>{this.state.lineNumber}: {premise.commandText} {
-      premise.premiseString}</p>;
+    const newElement = <tr><td>{this.state.lineNumber}</td><td>{
+      premise.premiseString}</td><td>{premise.commandText}</td></tr>;
     this.setState(
         {
           displayDict: {
@@ -73,8 +74,9 @@ class Show extends Component {
     if (premise.equalsPremise(this.props.conclusion)) {
       const newLineNumber = parseInt(premise.id);
       premise.id = this.state.ownLineNumber.toString();
-      const newElement = <p>{this.state.ownLineNumber}: <strike>Show</strike> {
-        premise.premiseString}</p>;
+      const newElement = <tr><td>{
+        this.state.ownLineNumber}</td><td><strike>Show</strike> {
+        premise.premiseString}</td><td></td></tr>;
       this.setState(
           {
             displayDict: {
@@ -137,16 +139,22 @@ class Show extends Component {
    * @return {Array} - array of html elements.
    */
   constructLines(linesArr) {
-    let lines = [];
+    const lines = [];
     lines.push(linesArr[0]);
     linesArr.slice(1).forEach(function(line, _) {
       if (line instanceof Array) {
-        lines = lines.concat(line);
+        const linesTable = this.constructLines(line);
+        lines.push(<tr><td colSpan="3">{linesTable}</td></tr>);
       } else {
         lines.push(line);
       }
-    });
-    return lines;
+    }.bind(this));
+    const table = <Table striped bordered hover>
+      <tbody id={`show-table-${this.state.ownLineNumber}`}>
+        {lines}
+      </tbody>
+    </Table>;
+    return table;
   }
 
   /**
@@ -154,10 +162,18 @@ class Show extends Component {
    * @return {string} HTML containing all of the Component's elements.
    */
   render() {
-    const lines = this.constructLines(this.state.displayDict.lines);
+    const linesTable = this.constructLines(this.state.displayDict.lines);
     return (
       <div>
-        {lines}
+        {linesTable}
+        {this.state.childShow &&
+        <Show premises={this.props.premises}
+          conclusion={this.state.childConclusion}
+          lastNumber={this.state.lineNumber}
+          outerPremises={this.state.linePremises.concat(
+              this.state.outerPremises)}
+          solved={this.solvedCallback}/>
+        }
         {!this.state.solved &&
           !this.state.childShow &&
         <InputController premises={this.props.premises}
@@ -167,13 +183,6 @@ class Show extends Component {
           lineNumber={this.state.lineNumber}
           outerPremises={this.state.outerPremises}
           innerPremises={this.state.linePremises}/>
-        }
-        {this.state.childShow &&
-        <Show premises={this.props.premises}
-          conclusion={this.state.childConclusion}
-          lastNumber={this.state.lineNumber}
-          outerPremises={this.state.linePremises}
-          solved={this.solvedCallback}/>
         }
         <p style={{color: 'red'}}>{this.state.errorMessage}</p>
       </div>

@@ -90,9 +90,13 @@ class Derivation extends Component {
    * @return {string} HTML containing all of the Component's elements.
    */
   render() {
+    let derColor = {color: 'black'};
+    if (this.state.solved) {
+      derColor = {color: 'green'};
+    }
     return (
       <div>
-        <p>{this.getDerivationPremiseString()} &there4; {
+        <p style={derColor}>{this.getDerivationPremiseString()} &there4; {
           this.state.conclusion.premiseString}</p>
         {this.state.showing &&
           <React.Fragment>
@@ -108,7 +112,7 @@ class Derivation extends Component {
           <Button type="button" onClick={this.showC}>Show Conc</Button>
         }
         {this.state.solved &&
-          <p>You solved it!</p>
+          <p style={{color: 'green'}}>You solved it!</p>
         }
       </div>
     );

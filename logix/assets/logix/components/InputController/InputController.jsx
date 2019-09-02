@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, ButtonToolbar, Modal} from 'react-bootstrap';
+import {Button, ButtonToolbar, Modal, Card} from 'react-bootstrap';
 import Rule from '../../classes/Rule';
 import PremiseConstructor from '../../classes/PremiseConstructor';
 import Premise from '../../classes/Premise';
@@ -21,9 +21,7 @@ class InputController extends Component {
     super(props);
     const mp = new Rule('MP');
     const dd = new Rule('DD');
-    const cd = new Rule('CD');
     const mt = new Rule('MT');
-    const idRule = new Rule('ID');
     this.updateShowModal = this.updateShowModal.bind(this);
     const premiseConstructor = new PremiseConstructor(this.updateShowModal);
     this.state = {
@@ -32,7 +30,7 @@ class InputController extends Component {
       availablePremises: this.props.premises.concat(
           this.props.innerPremises).concat(this.props.outerPremises),
       selectedPremises: [],
-      availableRules: [mp, mt, dd, cd, idRule],
+      availableRules: [mp, mt, dd],
       selectedRules: [],
       buttons: [],
       inputString: '',
@@ -135,12 +133,14 @@ class InputController extends Component {
    * the antecedent to the conditional conclusion.
    */
   assumeCD() {
+    const cdRule = new Rule('CD');
     this.setState((state) => ({
       selectedPremises: [...state.selectedPremises,
         state.conclusion.antecedent],
       inputString: state.inputString.concat('Ass CD'),
       submitToggle: true,
       assumed: true,
+      availableRules: [...state.availableRules, cdRule],
     }));
   }
 
@@ -149,6 +149,7 @@ class InputController extends Component {
    * the negation of the conclusion in order to generate a contradiction.
    */
   assumeID() {
+    const idRule = new Rule('ID');
     const negatedConclusion = new Premise({
       type: 'not',
       premise1: this.state.conclusion,
@@ -158,6 +159,7 @@ class InputController extends Component {
       inputString: state.inputString.concat('Ass ID'),
       submitToggle: true,
       assumed: true,
+      availableRules: [...state.availableRules, idRule],
     }));
   }
 
@@ -345,8 +347,9 @@ class InputController extends Component {
             </ButtonToolbar>
           </Modal.Body>
         </Modal>
-
-        <p>Command: {this.state.inputString}</p>
+        <Card>
+          <Card.Body>Command: {this.state.inputString}</Card.Body>
+        </Card>
         {this.state.submitToggle &&
         <Button type='button' onClick={
           this.submitCommand}>Submit Command</Button>}

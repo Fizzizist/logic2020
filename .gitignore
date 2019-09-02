@@ -10,3 +10,4 @@ logix/__pycache__
 requirements.txt
 webpack-stats.json
 *.pyc
+*.log

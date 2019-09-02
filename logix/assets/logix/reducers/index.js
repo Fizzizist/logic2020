@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux';
 import InputReducer from './inputReducer';
-import ShowReducer from './showReducer'
+import ShowReducer from './showReducer';
 
 /**
  * The Root for all of the redux reducers.

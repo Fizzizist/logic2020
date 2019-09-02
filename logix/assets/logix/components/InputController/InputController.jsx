@@ -29,9 +29,9 @@ class InputController extends Component {
     this.state = {
       premises: this.props.premises,
       conclusion: this.props.conclusion,
-      availablePremises: this.props.premises.concat(this.props.linePremises),
+      availablePremises: this.props.premises.concat(
+          this.props.innerPremises).concat(this.props.outerPremises),
       selectedPremises: [],
-      linePremises: this.props.linePremises,
       availableRules: [mp, mt, dd, cd, idRule],
       selectedRules: [],
       buttons: [],
@@ -51,6 +51,19 @@ class InputController extends Component {
     this.showCons = this.showCons.bind(this);
     this.submitCommand = this.submitCommand.bind(this);
     this.toggleShowMenu = this.toggleShowMenu.bind(this);
+  }
+
+  /**
+   * React method for when this component receives new props.
+   * @param {dict} nextProps - the incoming props.
+   */
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      availablePremises: nextProps.premises.concat(
+          nextProps.outerPremises).concat(
+          nextProps.innerPremises),
+      lineNumber: nextProps.lineNumber,
+    });
   }
 
   /**
@@ -238,10 +251,9 @@ class InputController extends Component {
         inputString: '',
         submitToggle: false,
         availablePremises: this.props.premises.concat(
-            state.linePremises).concat(
-            state.selectedPremises),
+            this.props.outerPremises).concat(
+            this.props.innerPremises),
         selectedPremises: [],
-        linePremises: [...state.linePremises, state.selectedPremises[0]],
         lineNumber: state.lineNumber + 1,
       }));
     }

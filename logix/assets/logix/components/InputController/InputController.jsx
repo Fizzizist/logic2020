@@ -54,16 +54,31 @@ class InputController extends Component {
   }
 
   /**
-   * React method for when this component receives new props.
-   * @param {dict} nextProps - the incoming props.
+   * Static method to update state before render occurs.
+   * @param {dict} props - new props.
+   * @param {dict} state - previous state.
+   * @return {dict} - new state
    */
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      availablePremises: nextProps.premises.concat(
-          nextProps.outerPremises).concat(
-          nextProps.innerPremises),
-      lineNumber: nextProps.lineNumber,
-    });
+  static getDerivedStateFromProps(props, state) {
+    return {
+      availablePremises: props.premises.concat(
+          props.innerPremises).concat(props.outerPremises).filter(
+          function(premise) {
+            return !state.selectedPremises.includes(premise);
+          }
+      ),
+    };
+  }
+
+  /**
+   * In-built component method for after render.
+   * @param {dict} prevProps - props from previous state.
+   * @param {dict} prevState - previous state.
+   */
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.errorMessage !== '') {
+      this.setState({errorMessage: ''});
+    }
   }
 
   /**
@@ -219,12 +234,18 @@ class InputController extends Component {
 
     const newPremise = newRule.resultingPremise;
     if (typeof newPremise === 'string') {
+      let assBool = this.state.assumed;
+      if (this.state.inputString.includes('Ass')) {
+        assBool = false;
+      }
       this.setState((state) => ({
         availablePremises: this.props.premises.concat(
-            state.linePremises),
+            this.props.innerPremises).concat(this.props.outerPremises),
         selectedPremises: [],
         inputString: '',
         errorMessage: newPremise,
+        submitToggle: false,
+        assumed: assBool,
       }));
     } else {
       const newDeepCopy = Object.assign(Object.create( Object.getPrototypeOf(
@@ -329,7 +350,7 @@ class InputController extends Component {
         {this.state.submitToggle &&
         <Button type='button' onClick={
           this.submitCommand}>Submit Command</Button>}
-        <p>**{this.state.errorMessage}**</p>
+        <p style={{color: 'red'}}>{this.state.errorMessage}</p>
       </div>
     );
   }

@@ -25,12 +25,24 @@ class Show extends Component {
       solved: false,
       lineNumber: this.props.lastNumber + 1,
       ownLineNumber: this.props.lastNumber,
+      errorMessage: '',
     };
     this.submitCommandCallback = this.submitCommandCallback.bind(this);
     this.newShow = this.newShow.bind(this);
     this.constructLines = this.constructLines.bind(this);
     this.solvedCallback = this.solvedCallback.bind(this);
     this.checkSolved = this.checkSolved.bind(this);
+  }
+
+  /**
+   * In-built component method for after render.
+   * @param {dict} prevProps - props from previous state.
+   * @param {dict} prevState - previous state.
+   */
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.errorMessage !== '') {
+      this.setState({errorMessage: ''});
+    }
   }
 
   /**
@@ -86,10 +98,17 @@ class Show extends Component {
    * @param {Premise} customPremise - The Premise to show from the new Show.
    */
   newShow(customPremise) {
-    this.setState((state) => ({
-      childShow: true,
-      childConclusion: customPremise,
-    }));
+    if (typeof customPremise === 'string') {
+      this.setState({
+        errorMessage: customPremise,
+      });
+    } else {
+      this.setState((state) => ({
+        childShow: true,
+        childConclusion: customPremise,
+        errorMessage: '',
+      }));
+    }
   }
 
   /**
@@ -156,6 +175,7 @@ class Show extends Component {
           outerPremises={this.state.linePremises}
           solved={this.solvedCallback}/>
         }
+        <p style={{color: 'red'}}>{this.state.errorMessage}</p>
       </div>
     );
   }

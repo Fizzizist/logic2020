@@ -12,7 +12,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <h1>Logic 2020</h1>
+        <h1>Logic 2020 - Alpha v0.0.1</h1>
         <p>Can you solve the following derivation?</p>
         <Derivation />
       </div>

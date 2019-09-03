@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import InputController from '../InputController';
 import {Table} from 'react-bootstrap';
+import KeyGenerator from '../../classes/KeyGenerator';
 
 /**
  * React component that displays the output of a particular Show.
@@ -14,10 +15,12 @@ class Show extends Component {
    */
   constructor(props) {
     super(props);
+    const keyGen = new KeyGenerator();
     this.props.conclusion.id = this.props.lastNumber.toString();
     this.state = {
       displayDict: {
-        lines: [<tr><td>{this.props.lastNumber}</td><td>Show {
+        lines: [<tr key={keyGen.uniqueKey}><td>{
+          this.props.lastNumber}</td><td>Show {
           this.props.conclusion.premiseString}</td><td></td></tr>],
       },
       childShow: false,
@@ -27,6 +30,7 @@ class Show extends Component {
       lineNumber: this.props.lastNumber + 1,
       ownLineNumber: this.props.lastNumber,
       errorMessage: '',
+      keyGen: keyGen,
     };
     this.submitCommandCallback = this.submitCommandCallback.bind(this);
     this.newShow = this.newShow.bind(this);
@@ -52,7 +56,8 @@ class Show extends Component {
    * @param {Premise} premise - Premise being passed out of the controller.
    */
   submitCommandCallback(premise) {
-    const newElement = <tr><td>{this.state.lineNumber}</td><td>{
+    const newElement = <tr key={this.state.keyGen.uniqueKey}><td>{
+      this.state.lineNumber}</td><td>{
       premise.premiseString}</td><td>{premise.commandText}</td></tr>;
     this.setState(
         {
@@ -74,7 +79,7 @@ class Show extends Component {
     if (premise.equalsPremise(this.props.conclusion)) {
       const newLineNumber = parseInt(premise.id);
       premise.id = this.state.ownLineNumber.toString();
-      const newElement = <tr><td>{
+      const newElement = <tr key={this.state.keyGen.uniqueKey}><td>{
         this.state.ownLineNumber}</td><td><strike>Show</strike> {
         premise.premiseString}</td><td></td></tr>;
       this.setState(
@@ -144,7 +149,8 @@ class Show extends Component {
     linesArr.slice(1).forEach(function(line, _) {
       if (line instanceof Array) {
         const linesTable = this.constructLines(line);
-        lines.push(<tr><td colSpan="3">{linesTable}</td></tr>);
+        lines.push(<tr key={this.state.keyGen.uniqueKey}><td colSpan="3">{
+          linesTable}</td></tr>);
       } else {
         lines.push(line);
       }
@@ -163,6 +169,10 @@ class Show extends Component {
    */
   render() {
     const linesTable = this.constructLines(this.state.displayDict.lines);
+    let inputDisplay = {display: 'none'};
+    if (!this.state.solved && !this.state.childShow) {
+      inputDisplay = {display: 'inline'};
+    }
     return (
       <div>
         {linesTable}
@@ -174,16 +184,16 @@ class Show extends Component {
               this.state.outerPremises)}
           solved={this.solvedCallback}/>
         }
-        {!this.state.solved &&
-          !this.state.childShow &&
-        <InputController premises={this.props.premises}
-          conclusion={this.props.conclusion}
-          submitCommand={this.submitCommandCallback}
-          newShow={this.newShow}
-          lineNumber={this.state.lineNumber}
-          outerPremises={this.state.outerPremises}
-          innerPremises={this.state.linePremises}/>
-        }
+        <div style={inputDisplay}>
+          <InputController
+            premises={this.props.premises}
+            conclusion={this.props.conclusion}
+            submitCommand={this.submitCommandCallback}
+            newShow={this.newShow}
+            lineNumber={this.state.lineNumber}
+            outerPremises={this.state.outerPremises}
+            innerPremises={this.state.linePremises}/>
+        </div>
         <p style={{color: 'red'}}>{this.state.errorMessage}</p>
       </div>
     );

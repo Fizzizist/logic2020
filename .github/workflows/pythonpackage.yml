@@ -43,5 +43,5 @@ jobs:
         pip install pytest
         pytest
     - name: Test with mocha
-    - run: |
+      run: |
         npm test

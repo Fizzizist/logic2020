@@ -16,7 +16,7 @@ import KeyGenerator from '../../classes/KeyGenerator';
 class InputController extends Component {
   /**
    * Constructor for the Component.
-   * @param {array} props - Array of state variables from parent Component.
+   * @param {Array} props - Array of state variables from parent Component.
    */
   constructor(props) {
     super(props);
@@ -54,6 +54,7 @@ class InputController extends Component {
     this.submitCommand = this.submitCommand.bind(this);
     this.toggleShowMenu = this.toggleShowMenu.bind(this);
     this.resetButtons = this.resetButtons.bind(this);
+    this.reconstructRules = this.reconstructRules.bind(this);
   }
 
   /**
@@ -144,7 +145,7 @@ class InputController extends Component {
    * On-click function for the Clear that resets the command box.
    */
   resetButtons() {
-    this.setState((state) => ({
+    this.setState({
       inputString: '',
       submitToggle: false,
       availablePremises: this.props.premises.concat(
@@ -152,6 +153,27 @@ class InputController extends Component {
           this.props.innerPremises),
       selectedPremises: [],
       assumeSelected: false,
+    },
+    this.reconstructRules);
+  }
+
+  /**
+   * Function to reconstruct availableRules to control certain conditional
+   * rules.
+   */
+  reconstructRules() {
+    const rules = this.state.availableRules.slice(0, 3);
+    if (this.state.assumeSelected || this.state.assumeSubmitted) {
+      if (this.state.conclusion.type === 'conditional') {
+        const cdRule = new Rule('CD');
+        rules.push(cdRule);
+      } else {
+        const idRule = new Rule('ID');
+        rules.push(idRule);
+      }
+    }
+    this.setState((state) => ({
+      availableRules: rules,
     }));
   }
 
@@ -160,15 +182,14 @@ class InputController extends Component {
    * the antecedent to the conditional conclusion.
    */
   assumeCD() {
-    const cdRule = new Rule('CD');
-    this.setState((state) => ({
-      selectedPremises: [...state.selectedPremises,
-        state.conclusion.antecedent],
-      inputString: state.inputString.concat('Ass CD'),
+    this.setState({
+      selectedPremises: [...this.state.selectedPremises,
+        this.state.conclusion.antecedent],
+      inputString: this.state.inputString.concat('Ass CD'),
       submitToggle: true,
       assumeSelected: true,
-      availableRules: [...state.availableRules, cdRule],
-    }));
+    },
+    this.reconstructRules);
   }
 
   /**
@@ -176,18 +197,17 @@ class InputController extends Component {
    * the negation of the conclusion in order to generate a contradiction.
    */
   assumeID() {
-    const idRule = new Rule('ID');
     const negatedConclusion = new Premise({
       type: 'not',
       premise1: this.state.conclusion,
     });
-    this.setState((state) => ({
-      selectedPremises: [...state.selectedPremises, negatedConclusion],
-      inputString: state.inputString.concat('Ass ID'),
+    this.setState({
+      selectedPremises: [...this.state.selectedPremises, negatedConclusion],
+      inputString: this.state.inputString.concat('Ass ID'),
       submitToggle: true,
       assumeSelected: true,
-      availableRules: [...state.availableRules, idRule],
-    }));
+    },
+    this.reconstructRules);
   }
 
   /**

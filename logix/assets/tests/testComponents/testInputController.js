@@ -5,7 +5,7 @@ import InputController from '../../logix/components/InputController';
 import Premise from '../../logix/classes/Premise';
 import Rule from '../../logix/classes/Rule';
 
-describe('InputController tests', () => {
+describe('InputController unit tests', () => {
   const ruleMP = new Rule('MP');
   const prem1 = new Premise({type: 'atomic', premise1: 'P', id: 'PR1'});
   const prem2 = new Premise({type: 'atomic', premise1: 'Q', id: '2'});

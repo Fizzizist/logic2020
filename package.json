@@ -5,7 +5,7 @@
   "main": "logix/assets/logix/index.jsx",
   "scripts": {
     "build": "webpack --config webpack.config.js --progess --colors --mode development",
-    "test": "nyc --includes logix/assets --extension .jsx --skip-full --check-coverage --lines 70 mocha --recursive --require @babel/register logix/assets/tests"
+    "test": "nyc --includes logix/assets --extension .jsx --skip-full --check-coverage --lines 70 mocha --recursive --require @babel/register --require logix/assets/tests/setup.js logix/assets/tests"
   },
   "author": "Peter Vlasveld",
   "license": "ISC",
@@ -16,6 +16,9 @@
     "@babel/register": "^7.5.5",
     "babel-loader": "^8.0.6",
     "bootstrap": "^4.3.1",
+    "chai": "^4.2.0",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.14.0",
     "eslint": "^6.1.0",
     "eslint-config-google": "^0.13.0",
     "eslint-config-standard": "^13.0.1",
@@ -25,12 +28,15 @@
     "eslint-plugin-react": "^7.14.3",
     "eslint-plugin-standard": "^4.0.0",
     "jquery": "^3.4.1",
+    "jsdom": "^15.1.1",
     "mocha": "^6.2.0",
     "nyc": "^14.1.1",
     "react-bootstrap": "^1.0.0-beta.12",
+    "react-dom": "^16.9.0",
     "react-redux": "^7.1.1",
     "redux": "^4.0.4",
     "redux-logger": "^3.0.6",
+    "uniqid": "^5.0.3",
     "webpack": "^4.39.1",
     "webpack-bundle-tracker": "^0.4.2-beta",
     "webpack-cli": "^3.3.6"

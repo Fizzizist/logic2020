@@ -1,6 +1,7 @@
 import React from 'react';
 import {Button} from 'react-bootstrap';
 import Premise from '../Premise';
+import uniqid from 'uniqid';
 
 /**
  * Class for constructing custom premises which can be used for showing or
@@ -108,27 +109,27 @@ class PremiseConstructor {
    */
   constructButtons() {
     // construct atomic buttons
-    this.atomicsArray.forEach(function(atomicStr, _) {
-      const button = <Button onClick={() =>
+    this.atomicsArray.forEach(function(atomicStr, i) {
+      const button = <Button key={uniqid()} onClick={() =>
         this.addAtomic(atomicStr)}>{atomicStr}</Button>;
       this.buttons.push(button);
     }.bind(this));
 
     // construct joining symbol buttons.
-    this.joiningSymbols.forEach(function(symbol, _) {
-      const button = <Button onClick={() =>
+    this.joiningSymbols.forEach(function(symbol, i) {
+      const button = <Button key={uniqid()} onClick={() =>
         this.addJoiningSymbol(symbol)}>{symbol}</Button>;
       this.buttons.push(button);
     }.bind(this));
 
     // construct negations button
-    const button = <Button onClick={this.addNegation}>{this.negationSymbol
-    }</Button>;
+    const button = <Button key={uniqid()} onClick={
+      this.addNegation}>{this.negationSymbol}</Button>;
     this.buttons.push(button);
 
     // construct bracket symbol buttons.
-    this.bracketSymbols.forEach(function(symbol, _) {
-      const button = <Button onClick={() =>
+    this.bracketSymbols.forEach(function(symbol, i) {
+      const button = <Button key={uniqid()} onClick={() =>
         this.addBracketSymbol(symbol)}>{symbol}</Button>;
       this.buttons.push(button);
     }.bind(this));

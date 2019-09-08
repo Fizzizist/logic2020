@@ -3,7 +3,7 @@ import {Button, ButtonToolbar, Modal, Card} from 'react-bootstrap';
 import Rule from '../../classes/Rule';
 import PremiseConstructor from '../../classes/PremiseConstructor';
 import Premise from '../../classes/Premise';
-import KeyGenerator from '../../classes/KeyGenerator';
+import uniqid from 'uniqid';
 
 // Might not end up using redux at all.
 // import {connect} from 'react-redux';
@@ -20,7 +20,6 @@ class InputController extends Component {
    */
   constructor(props) {
     super(props);
-    const keyGen = new KeyGenerator;
     const mp = new Rule('MP');
     const dd = new Rule('DD');
     const mt = new Rule('MT');
@@ -44,7 +43,6 @@ class InputController extends Component {
       showMenuString: '',
       assumeSubmitted: false,
       assumeSelected: false,
-      keyGen: keyGen,
     };
     this.constructButtons = this.constructButtons.bind(this);
     this.selectPremise = this.selectPremise.bind(this);
@@ -93,15 +91,14 @@ class InputController extends Component {
    */
   constructButtons() {
     const buttons = [];
-
     // Add custom Show buttons
     const showCustomButton =
-    <Button key={this.state.keyGen.uniqueKey} onClick={
+    <Button key={uniqid()} onClick={
       this.toggleShowMenu}>Show Custom</Button>;
     buttons.push(showCustomButton);
     if (this.state.conclusion.type === 'conditional') {
       const showConsButton =
-      <Button key={this.state.keyGen.uniqueKey} onClick={
+      <Button key={uniqid()} onClick={
         this.showCons}>Show Cons</Button>;
       buttons.push(showConsButton);
     }
@@ -110,29 +107,29 @@ class InputController extends Component {
     if (this.state.selectedPremises.length === 0) {
       if (this.state.conclusion.type === 'conditional' &&
           !this.state.assumeSelected && !this.state.assumeSubmitted) {
-        const button = <Button key={this.state.keyGen.uniqueKey} onClick={
+        const button = <Button key={uniqid()} onClick={
           this.assumeCD}>Assume CD</Button>;
         buttons.push(button);
       }
       if (!this.state.assumeSelected && !this.state.assumeSubmitted) {
-        const button = <Button key={this.state.keyGen.uniqueKey} onClick={
+        const button = <Button key={uniqid()} onClick={
           this.assumeID}>Assume ID</Button>;
         buttons.push(button);
       }
     }
 
     // Add Premise buttons for each Premise available to the user.
-    this.state.availablePremises.forEach(function(premise, _) {
-      const button = <Button key={this.state.keyGen.uniqueKey} onClick={
+    this.state.availablePremises.forEach(function(premise, i) {
+      const button = <Button key={uniqid()} onClick={
         () => this.selectPremise(premise)
       }>{premise.id}</Button>;
       buttons.push(button);
     }.bind(this));
 
     // Generate buttons for Rules
-    this.state.availableRules.forEach(function(rule, _) {
+    this.state.availableRules.forEach(function(rule, i) {
       if (this.state.selectedPremises.length === rule.allowedPremises) {
-        const button = <Button key={this.state.keyGen.uniqueKey} onClick={
+        const button = <Button key={uniqid()} onClick={
           () =>this.selectRule(rule)
         }>{rule.name}</Button>;
         buttons.push(button);
@@ -385,7 +382,7 @@ class InputController extends Component {
         }>
           <Modal.Header>
             <Modal.Title>{this.state.showMenuString}
-              <Button key={this.state.keyGen.uniqueKey} type="submit"
+              <Button key={uniqid()} type="submit"
                 onClick={() =>
                   this.props.newShow(this.showCustomPremise())}>Submit</Button>
             </Modal.Title>
@@ -399,11 +396,11 @@ class InputController extends Component {
         <Card>
           <Card.Body>Command: {this.state.inputString}</Card.Body>
         </Card>
-        <Button key={this.state.keyGen.uniqueKey} type='button'
+        <Button key={uniqid()} type='button'
           variant='secondary' onClick={
             this.resetButtons}>Clear</Button>
         {this.state.submitToggle &&
-        <Button key={this.state.keyGen.uniqueKey} type='button' onClick={
+        <Button key={uniqid()} type='button' onClick={
           this.submitCommand}>Submit Command</Button>}
         <p style={{color: 'red'}}>{this.state.errorMessage}</p>
       </div>

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import InputController from '../InputController';
 import {Table} from 'react-bootstrap';
-import KeyGenerator from '../../classes/KeyGenerator';
+import uniqid from 'uniqid';
 
 /**
  * React component that displays the output of a particular Show.
@@ -15,11 +15,10 @@ class Show extends Component {
    */
   constructor(props) {
     super(props);
-    const keyGen = new KeyGenerator();
     this.props.conclusion.id = this.props.lastNumber.toString();
     this.state = {
       displayDict: {
-        lines: [<tr key={keyGen.uniqueKey}><td>{
+        lines: [<tr key={uniqid()}><td>{
           this.props.lastNumber}</td><td>Show {
           this.props.conclusion.premiseString}</td><td></td></tr>],
       },
@@ -30,7 +29,6 @@ class Show extends Component {
       lineNumber: this.props.lastNumber + 1,
       ownLineNumber: this.props.lastNumber,
       errorMessage: '',
-      keyGen: keyGen,
     };
     this.submitCommandCallback = this.submitCommandCallback.bind(this);
     this.newShow = this.newShow.bind(this);
@@ -56,7 +54,7 @@ class Show extends Component {
    * @param {Premise} premise - Premise being passed out of the controller.
    */
   submitCommandCallback(premise) {
-    const newElement = <tr key={this.state.keyGen.uniqueKey}><td>{
+    const newElement = <tr key={uniqid()}><td>{
       this.state.lineNumber}</td><td>{
       premise.premiseString}</td><td>{premise.commandText}</td></tr>;
     this.setState(
@@ -79,7 +77,7 @@ class Show extends Component {
     if (premise.equalsPremise(this.props.conclusion)) {
       const newLineNumber = parseInt(premise.id);
       premise.id = this.state.ownLineNumber.toString();
-      const newElement = <tr key={this.state.keyGen.uniqueKey}><td>{
+      const newElement = <tr key={uniqid()}><td>{
         this.state.ownLineNumber}</td><td><strike>Show</strike> {
         premise.premiseString}</td><td></td></tr>;
       this.setState(
@@ -149,7 +147,7 @@ class Show extends Component {
     linesArr.slice(1).forEach(function(line, _) {
       if (line instanceof Array) {
         const linesTable = this.constructLines(line);
-        lines.push(<tr key={this.state.keyGen.uniqueKey}><td colSpan="3">{
+        lines.push(<tr key={uniqid()}><td colSpan="3">{
           linesTable}</td></tr>);
       } else {
         lines.push(line);

@@ -4,11 +4,6 @@ import {Button} from 'react-bootstrap';
 import InputController from '../InputController';
 import Premise from '../../classes/Premise';
 
-// Might not end up using redux.
-// import {newShow} from '../../actions/index';
-// import {connect} from 'react-redux';
-// import {bindActionCreators} from 'redux';
-
 /**
  * React Component for the Derivation. This is basically a container for the
  * Show and InputController Components.
@@ -119,32 +114,4 @@ class Derivation extends Component {
   }
 }
 
-// Might not actually have to use Redux at all.
-
-// /**
-//  * Function to map the redux state to the local props.
-//  * @param {dict} state - The input redux state.
-//  * @return {dict} - props to be mapped.
-//  */
-// const mapStateToProps = (state) => {
-//   return {
-//     inputPremises: state.inputPremises,
-//     solved: state.shows[0].solved,
-//   };
-// };
-
-// /**
-//  * Function to map actions to the redux state.
-//  * @param {dict} dispatch
-//  * @return {dict}
-//  */
-// function mapDispatchToProps(dispatch) {
-//   return bindActionCreators(
-//       {
-//         newShow,
-//       },
-//       dispatch);
-// }
-
-// export default connect(mapStateToProps, mapDispatchToProps)(Derivation);
 export default Derivation;

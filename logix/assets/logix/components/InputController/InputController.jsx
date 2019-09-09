@@ -5,11 +5,6 @@ import PremiseConstructor from '../../classes/PremiseConstructor';
 import Premise from '../../classes/Premise';
 import uniqid from 'uniqid';
 
-// Might not end up using redux at all.
-// import {connect} from 'react-redux';
-// import {bindActionCreators} from 'redux';
-// import {submitCommandAction, showSolved, newShow} from '../../actions';
-
 /**
  * React Component for user input into the Derivation Component.
  */
@@ -408,21 +403,4 @@ class InputController extends Component {
   }
 }
 
-// Might not end up using Redux.
-
-// /**
-//  * Function to map the redux actions to props.
-//  * @param {dict} dispatch - redux dispatcher
-//  * @return {dict} - bound action creators.
-//  */
-// function mapDispatchToProps(dispatch) {
-//   return bindActionCreators({
-//     submitCommandAction,
-//     showSolved,
-//     newShow,
-//   },
-//   dispatch);
-// }
-
-// export default connect(null, mapDispatchToProps)(InputController);
 export default InputController;

@@ -1,5 +1,7 @@
 # Logic 2020 v0.0.1 Alpha #
 
+Available at [logic2020.info](logic2020.info)
+
 Logic 2020 is a Django/React project meant to be an educational tool for students studying Logic.
 It is based off of Logic 2010, an educational application that is adopted by many Universities in the United States and Canada.
 Logic 2020 is meant to be an updated, web-based version of that.

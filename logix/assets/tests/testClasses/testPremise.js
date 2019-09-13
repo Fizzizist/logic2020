@@ -1,4 +1,5 @@
 const assert = require('assert');
+const expect = require('chai').expect;
 import Premise from '../../logix/classes/Premise';
 
 describe('Premise tests', function() {
@@ -119,5 +120,27 @@ describe('Premise tests', function() {
       premise1: premiseB,
     });
     assert.equal(newPremise.equalsPremise(premiseNot), false);
+  });
+  it('toJSON atomic', function() {
+    expect(premiseA.toJSON()).to.eql({
+      id: 'PR1',
+      type: 'atomic',
+      symbol: 'A'});
+  });
+  it('toJSON conditional (nesting)', function() {
+    expect(premiseCond.toJSON()).to.eql({
+      id: null,
+      type: 'conditional',
+      antecedent: {
+        id: 'PR1',
+        type: 'atomic',
+        symbol: 'A',
+      },
+      consequent: {
+        id: null,
+        type: 'atomic',
+        symbol: 'B',
+      },
+    });
   });
 });

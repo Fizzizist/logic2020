@@ -247,6 +247,43 @@ class Premise {
         return false;
     }
   }
+
+  /**
+   * Function to convert this Premise into a JSON.
+   * @return {JSON} - representing the Premise.
+   */
+  toJSON() {
+    switch (this.type) {
+      case 'atomic':
+        return {
+          id: this.id,
+          type: this.type,
+          symbol: this.symbol,
+        };
+      case 'conditional':
+        return {
+          id: this.id,
+          type: this.type,
+          antecedent: this.ante.toJSON(),
+          consequent: this.cons.toJSON(),
+        };
+      case 'biconditional':
+      case 'and':
+      case 'or':
+        return {
+          id: this.id,
+          type: this.type,
+          premise1: this.premise1.toJSON(),
+          premise2: this.premise2.toJSON(),
+        };
+      case 'not':
+        return {
+          id: this.id,
+          type: this.type,
+          premise: this.premise.toJSON(),
+        };
+    }
+  }
 }
 
 export default Premise;

@@ -5,7 +5,7 @@
   "main": "logix/assets/logix/index.jsx",
   "scripts": {
     "build": "webpack --config webpack.config.js --progess --colors --mode development",
-    "test": "nyc --includes logix/assets --extension .jsx --skip-full --check-coverage --lines 70 mocha --recursive --require @babel/register --require logix/assets/tests/setup.js logix/assets/tests"
+    "test": "nyc --reporter=lcov --includes logix/assets --extension .jsx --skip-full --check-coverage --lines 70 mocha --recursive --require @babel/register --require logix/assets/tests/setup.js logix/assets/tests && codecov -t 7be52f50-5033-408f-a1bc-47677d3d0ebe"
   },
   "author": "Peter Vlasveld",
   "license": "ISC",
@@ -17,6 +17,7 @@
     "babel-loader": "^8.0.6",
     "bootstrap": "^4.3.1",
     "chai": "^4.2.0",
+    "codecov": "^3.5.0",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
     "eslint": "^6.1.0",

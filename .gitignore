@@ -5,6 +5,7 @@ node_modules/
 logix/static/
 logix-venv/
 logix/__pycache__
+coverage/
 
 # Untracked files
 requirements.txt

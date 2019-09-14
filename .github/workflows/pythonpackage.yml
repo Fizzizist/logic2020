@@ -1,4 +1,4 @@
-name: Python package
+name: logic2020 CI
 
 on: [push]
 

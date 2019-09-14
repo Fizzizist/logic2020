@@ -132,6 +132,10 @@ USE_L10N = True
 
 USE_TZ = True
 
+# Email settings for password reset development only
+# TODO integrate with a real service in production
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/

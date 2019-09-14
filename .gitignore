@@ -12,3 +12,4 @@ requirements.txt
 webpack-stats.json
 *.pyc
 *.log
+.coverage

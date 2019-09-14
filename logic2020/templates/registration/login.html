@@ -8,11 +8,11 @@
         {% csrf_token %}
         <div class="form-group">
             <label for="id_username">Username</label>
-            <input type="text" class="form-control" name="username" autofocus required id="id_username">
+            <input type="text" class="form-control" placeholder="Username" name="username" autofocus required id="id_username">
         </div>
         <div class="form-group">
             <label for="id_password">Password</label>
-            <input type="password" class="form-control" name="password" required id="id_password">
+            <input type="password" class="form-control" placeholder="Password" name="password" required id="id_password">
         </div>
         {% if form.errors %}
             <div class="alert alert-danger" role="alert">
@@ -22,6 +22,8 @@
         {% endif %}
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+    <p>Forgot your password?</p>
+    <a href="{% url 'password_reset' %}"><button class="btn btn-default">Reset Password</button></a>
     <p>Don't have an account?</p>
     <a href="{% url 'signup' %}"><button class="btn btn-default">Register</button></a>
 </div>

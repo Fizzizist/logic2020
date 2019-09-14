@@ -2,6 +2,7 @@
 [![Python 3.5](https://img.shields.io/badge/python-3.5-blue.svg)](https://www.python.org/downloads/release/python-350/)
 [![Python 3.6](https://img.shields.io/badge/python-3.6-blue.svg)](https://www.python.org/downloads/release/python-360/)
 [![Python 3.7](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/downloads/release/python-370/)
+[![codecov](https://codecov.io/gh/Fizzizist/logic2020/branch/master/graph/badge.svg)](https://codecov.io/gh/Fizzizist/logic2020)
 # Logic 2020 v0.0.1 Alpha #
 
 Available at [logic2020.info](http://logic2020.info)

@@ -1,4 +1,33 @@
 # Contribution Guideline #
+## Setting up your dev environment ##
+The following tutorial assumes that you are running some kind of linux, and you already have Python3 and NodeJS installed.
+1. Clone the repository and cd into it.
+```
+git clone https://github.com/Fizzizist/logic2020.git
+cd logic2020
+```
+2. Set up python virtual environment and activate it
+```
+pip install virtualenv
+virtualenv logix-venv
+source logix-venv/bin/activate
+```
+3. Install dependencies
+```
+pip install pip-tools
+pip-compile
+pip-sync
+npm install
+```
+Once that is all complete you should be able to run:
+```
+npm run build
+./manage.py runserver
+```
+then point your browser to `localhost:8000` to make sure everything is working.
+Be sure to create an issue in the repo if this process does not work so that I can fix this document.
+
+## Contributing to the repository ##
 I am happy for anyone interested in formal logic to contribute to this project!
 To make the development process go much smoother, this project has some guidlines to follow if you would like to contribute:
 This project uses Trunk-Based Development which means there is a specific and pretty easy way to make contributions:

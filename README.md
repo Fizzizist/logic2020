@@ -1,4 +1,5 @@
 ![Action status](https://github.com/Fizzizist/logic2020/workflows/logic2020%20CI/badge.svg)
+[![Python 3.6](https://img.shields.io/badge/python-3.6-blue.svg)](https://www.python.org/downloads/release/python-360/)
 # Logic 2020 v0.0.1 Alpha #
 
 Available at [logic2020.info](http://logic2020.info)

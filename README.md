@@ -1,4 +1,4 @@
-![Actions Status](https://github.com/Fizzizist/logic2020/workflows/.github/workflows/pythonpackage.yml/badge.svg)
+[![Actions Status](https://github.com/Fizzizist/logic2020/workflows/.github/workflows/pythonpackage.yml/badge.svg?branch=master)](https://github.com/{owner}/{repo}/actions)
 
 # Logic 2020 v0.0.1 Alpha #
 

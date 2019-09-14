@@ -1,14 +1,9 @@
 
+{% extends 'base.html' %}
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Logic 2020</title>
-</head>
-
-<body>
-<div id="react"></div>
-<script type="text/javascript" src="../static/logix/bundles/logix.bundle.js"></script>
-</body>
-</html>
+{% block content %}
+<div class="container-fluid">
+    <div id="react"></div>
+    <script type="text/javascript" src="../static/logix/bundles/logix.bundle.js"></script>
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1>Logic2020 v0.0.1 Alpha</h1>
+    <h2>Please log in to proceed</h2>
+    <form method="POST" action="{% url 'login' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_username">Username</label>
+            <input type="text" class="form-control" name="username" autofocus required id="id_username">
+        </div>
+        <div class="form-group">
+            <label for="id_password">Password</label>
+            <input type="password" class="form-control" name="password" required id="id_password">
+        </div>
+        {% if form.errors %}
+            <div class="alert alert-danger" role="alert">
+                <i class="fa fa-exclamation-circle"></i>
+              Username and password did not match our records.
+            </div>
+        {% endif %}
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <p>Don't have an account?</p>
+    <a href="{% url 'signup' %}"><button class="btn btn-default">Register</button></a>
+</div>
+{% endblock %}

@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'logix',
+    'accounts.apps.AccountsConfig',
     'shell_plus',
     'webpack_loader'
 ]
@@ -64,7 +65,7 @@ ROOT_URLCONF = 'logic2020.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'logic2020/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -112,6 +113,10 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+# Login and Logout Redirects
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 
 # Internationalization

@@ -1,3 +1,5 @@
+[![Actions Status](https://github.com/Fizzizist/logic2020/workflows/python-package/badge.svg)](https://github.com/Fizzizist/logic2020/actions)
+
 # Logic 2020 v0.0.1 Alpha #
 
 Available at [logic2020.info](http://logic2020.info)

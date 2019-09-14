@@ -1,3 +1,4 @@
+![](https://github.com/Fizzizist/logic2020/workflows/Python%20package/badge.svg)
 # Logic 2020 v0.0.1 Alpha #
 
 Available at [logic2020.info](http://logic2020.info)

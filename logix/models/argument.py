@@ -6,4 +6,4 @@ from logix.enums import ArgumentSet
 
 class Argument(models.Model):
     argument = JSONField()
-    argument_set = enum.EnumField(ArgumentSet, default=ArgumentSet.CUSTOM)
+    argument_set = enum.EnumField(ArgumentSet, default=ArgumentSet.SET1)

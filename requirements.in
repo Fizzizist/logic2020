@@ -4,4 +4,8 @@ django-shell-plus==1.1.7
 django-enumfield==1.5
 psycopg2-binary==2.8.3
 pytest==5.1.2
+pytest-django==3.5.1
 pytest-cov==2.7.1
+factory-boy==2.12.0
+pytest-factoryboy==2.0.3
+loguru==0.3.2

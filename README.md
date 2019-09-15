@@ -1,5 +1,4 @@
 ![Action status](https://github.com/Fizzizist/logic2020/workflows/logic2020%20CI/badge.svg)
-[![Python 3.5](https://img.shields.io/badge/python-3.5-blue.svg)](https://www.python.org/downloads/release/python-350/)
 [![Python 3.6](https://img.shields.io/badge/python-3.6-blue.svg)](https://www.python.org/downloads/release/python-360/)
 [![Python 3.7](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/downloads/release/python-370/)
 [![codecov](https://codecov.io/gh/Fizzizist/logic2020/branch/master/graph/badge.svg)](https://codecov.io/gh/Fizzizist/logic2020)
